@@ -1,0 +1,32 @@
+.header-bg {
+  color: #ee3c16;
+  font-family: fantasy;
+  letter-spacing: 1px;
+}
+.c-name {
+  box-shadow: 1px 2px 2px 3px inset brown;
+  padding: 8px;
+  border-radius: 10px;
+}
+.c-caption {
+  color: whitesmoke;
+  font-family: fantasy;
+  letter-spacing: 1px;
+  font-size: 50px;
+  margin-top: 80px;
+}
+
+.main {
+  background: url("../../../assets/images/bg.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 488px;
+}
+.admin-card {
+  background: transparent;
+  margin-top: 50px;
+  border: 1px solid whitesmoke;
+}
+input {
+  background: transparent;
+}
