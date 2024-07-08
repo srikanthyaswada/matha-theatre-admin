@@ -1,0 +1,157 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-10 mt-4 m-auto">
+      <div class="row">
+        <div class="col-sm-4">
+          <div>
+            <span class="card-header">Add Theatre Capacity</span>
+            <hr />
+          </div>
+          <form [formGroup]="priceForm">
+            <div class="form-group mb-3">
+              <label for="theatre">Theatre</label>
+              <select
+                id="theatre"
+                class="form-control"
+                formControlName="theatreId"
+                (change)="onTheatreChange($event)"
+              >
+                <option value="">--- select ---</option>
+                <option
+                  *ngFor="let theatre of theatres"
+                  value="{{ theatre._id }}"
+                >
+                  {{ theatre.theatrename }}
+                </option>
+              </select>
+              <div
+                *ngIf="
+                  priceForm.controls['theatreId'].invalid &&
+                  (priceForm.controls['theatreId'].dirty ||
+                    priceForm.controls['theatreId'].touched)
+                "
+                class="text-danger"
+              >
+                Theatre is required
+              </div>
+            </div>
+
+            <div class="form-group mb-3">
+              <label for="theatre">Capacity</label>
+              <select
+                id="theatre"
+                class="form-control"
+                formControlName="capacityId"
+              >
+                <option value="">--- select ---</option>
+                <option *ngFor="let c of capatices" value="{{ c._id }}">
+                  {{ c.capacity }}
+                </option>
+              </select>
+              <div
+                *ngIf="
+                  priceForm.controls['capacityId'].invalid &&
+                  (priceForm.controls['capacityId'].dirty ||
+                    priceForm.controls['capacityId'].touched)
+                "
+                class="text-danger"
+              >
+                Capacity is required
+              </div>
+            </div>
+
+            <div class="form-group mb-3">
+              <label>Price</label>
+              <input
+                type="number"
+                id="price"
+                class="form-control"
+                formControlName="price"
+              />
+              <div
+                *ngIf="
+                  priceForm.controls['price'].invalid &&
+                  (priceForm.controls['price'].dirty ||
+                    priceForm.controls['price'].touched)
+                "
+                class="text-danger"
+              >
+                Price is required and must be a positive number
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="text-center">
+                <button
+                  type="submit"
+                  class="btn btn-primary"
+                  *ngIf="addBtn"
+                  (click)="addPrices()"
+                  [disabled]="priceForm.invalid"
+                >
+                  Add Price
+                </button>
+                <button
+                  type="submit"
+                  class="btn btn-primary"
+                  *ngIf="updateBtn"
+                  (click)="updatePrices()"
+                  [disabled]="priceForm.invalid"
+                >
+                  Update Price
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="col-sm-1"></div>
+        <div class="col-sm-7">
+          <div>
+            <span class="card-header">Price List</span>
+            <hr />
+          </div>
+
+          <div
+            class="table-responsive"
+            style="max-height: 400px; overflow-y: auto"
+          >
+            <table class="table table-bordered text-center">
+              <thead class="thead-fixed sticky-top">
+                <tr>
+                  <th>#</th>
+                  <th>Theatre Name</th>
+                  <th>Theatre Capacity</th>
+                  <th>Price</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let t of theatresListWithId; index as i">
+                  <td>{{ i + 1 }}</td>
+                  <td>{{ t.theatre_details[0]?.theatrename }}</td>
+                  <td>{{ t.capacity_details[0]?.capacity }}</td>
+                  <td>{{ t.price }}</td>
+                  <td class="text-center">
+                    <button class="btn btn me-1">
+                      <mat-icon color="primary" class="" (click)="editPrices(t)"
+                        >edit</mat-icon
+                      >
+                    </button>
+                    <button class="btn btn ms-1">
+                      <mat-icon
+                        color="warn"
+                        class=""
+                        (click)="confirmDeletePrices(t)"
+                        >delete</mat-icon
+                      >
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

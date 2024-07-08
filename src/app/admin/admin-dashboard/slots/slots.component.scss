@@ -1,0 +1,12 @@
+.table-responsive {
+    max-height: 400px;
+    overflow-y: auto;
+  }
+  
+  .table thead th {
+    position: sticky;
+    top: 0;
+    background-color: rgb(204, 232, 210);
+    z-index: 1;
+  }
+  

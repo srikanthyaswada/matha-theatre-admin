@@ -1,0 +1,120 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-8 m-auto mt-4">
+      <div class="row">
+        <div class="col-sm-4">
+          <div>
+            <span class="card-header">Add Photos with price</span>
+            <hr />
+          </div>
+          <div>
+            <form [formGroup]="photoForm">
+              <div class="form-group mb-3">
+                <label class="form-label">Number of Photos:</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  formControlName="photoscount"
+                />
+                <div
+                  *ngIf="
+                    photoForm.get('photoscount')?.invalid &&
+                    photoForm.get('photoscount')?.touched
+                  "
+                  class="text-danger"
+                >
+                  Photos count is required.
+                </div>
+              </div>
+              <div class="form-group mb-3">
+                <label class="form-label">Price per Photo:</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="price"
+                />
+                <div
+                  *ngIf="
+                    photoForm.get('price')?.invalid &&
+                    photoForm.get('price')?.touched
+                  "
+                  class="text-danger"
+                >
+                  Price is required.
+                </div>
+              </div>
+              <div class="row">
+                <div class="text-center mb-3">
+                  <button
+                    type="submit"
+                    class="btn btn-primary"
+                    *ngIf="addBtn"
+                    (click)="addPhoto()"
+                    [disabled]="photoForm.invalid"
+                  >
+                    Add photos
+                  </button>
+                  <button
+                    type="submit"
+                    class="btn btn-primary"
+                    *ngIf="updateBtn"
+                    (click)="updatePhoto()"
+                    [disabled]="photoForm.invalid"
+                  >
+                    Update photos
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="col-sm-1"></div>
+        <div class="col-sm-7">
+          <div>
+            <span class="card-header">Photos with price</span>
+            <hr />
+          </div>
+          <!-- <div *ngIf="photos && photos.length === 0">
+            <span>Photos unavailable</span>
+          </div> -->
+          <table class="table table-bordered text-center">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Photo count</th>
+                <th>Price</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let photo of photos; index as i">
+                <td>{{ i + 1 }}</td>
+                <td>
+                  {{ photo.photoscount }}
+                </td>
+                <td>
+                  {{ photo.price }}
+                </td>
+                <td class="text-center">
+                  <mat-icon
+                    color="primary"
+                    class="me-1"
+                    (click)="editPhoto(photo)"
+                    >edit</mat-icon
+                  >
+
+                  <mat-icon
+                    color="warn"
+                    class="ms-1"
+                    (click)="confirmDeletePhoto(photo)"
+                    >delete</mat-icon
+                  >
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

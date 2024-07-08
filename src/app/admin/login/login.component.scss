@@ -1,10 +1,13 @@
 .header-bg {
   color: #ee3c16;
-  font-family: fantasy;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
   letter-spacing: 1px;
+  font-size: 18px;
+  font-weight: 600;
 }
 .c-name {
-  box-shadow: 1px 2px 2px 3px inset brown;
+  box-shadow: 1px 2px 2px 3px inset rgb(209, 59, 59);
   padding: 8px;
   border-radius: 10px;
 }
@@ -23,10 +26,20 @@
   height: 488px;
 }
 .admin-card {
-  background: transparent;
   margin-top: 50px;
-  border: 1px solid whitesmoke;
+  background-color: #fcfafa;
 }
-input {
-  background: transparent;
+
+.text-danger {
+  color: #ff4d4d;
+}
+
+.text-success {
+  color: #28a745;
+}
+
+.loginbtn {
+  background-color: #ee3c16;
+  color: whitesmoke;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }

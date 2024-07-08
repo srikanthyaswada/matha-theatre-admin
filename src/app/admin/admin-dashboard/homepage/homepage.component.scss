@@ -1,0 +1,118 @@
+/* Dashboard Container */
+.booking-dashboard {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  max-width: 1200px;
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+  background-color: #f4f4f9;
+  margin: auto;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* Individual Counters */
+.booking-counter,
+.booking-chart {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 350px; /* Adjusted max-width for charts to fit content */
+  transition: transform 0.3s;
+}
+
+.booking-counter:hover,
+.booking-chart:hover {
+  transform: translateY(-10px);
+}
+
+.counter-title,
+.chart-title {
+  font-size: 18px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.counter-value {
+  font-size: 32px;
+  color: #2196f3;
+}
+
+/* Bar Chart */
+.chart-bar .bar-container {
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+}
+
+.bar {
+  width: 20%;
+  background: #4caf50;
+  border-radius: 4px;
+  transition: background 0.3s;
+}
+
+.bar:hover {
+  background: #388e3c;
+}
+
+/* Doughnut and Pie Charts */
+.chart-doughnut .doughnut,
+.chart-pie .pie {
+  position: relative;
+  width: 150px; /* Adjust width of doughnut and pie charts */
+  height: 150px; /* Adjust height of doughnut and pie charts */
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chart-doughnut .doughnut {
+  background: conic-gradient(#ff5722 0% 40%, #ff9800 40% 70%, #ffc107 70% 100%);
+}
+
+.chart-pie .pie {
+  background: conic-gradient(#ff5722 0% 60%, #f4f4f9 60% 100%);
+}
+
+/* Line Chart */
+.chart-line .line-container {
+  width: 100%;
+  height: 150px; /* Adjust height of line chart container */
+  position: relative;
+}
+
+.line {
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background: #2196f3;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+}
+
+.line::before {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  border-top: 20px solid #2196f3;
+  left: 50%;
+  transform: translateX(-50%);
+  top: -10px;
+}

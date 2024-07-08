@@ -6,45 +6,59 @@
   </div>
 
   <div class="row main">
-    <div class="col-sm-7">
+    <div class="col-sm-7 p-4">
       <div class="p-4">
-        <p class="c-caption">
-          Celebrate togetherness with big-screen entertainment along with your
-          loved ones
-        </p>
+        <p class="c-caption">Celebrate togetherness with</p>
+        <p class="c-caption">big-screen entertainment</p>
+        <p class="c-caption">along with your loved ones</p>
       </div>
     </div>
     <div class="col-sm-5 p-4">
       <div class="row">
-        <div class="col-sm-7">
-          <div class="card admin-card text-light border-0">
+        <div class="col-sm-8 p-2">
+          <div class="card admin-card  border-0">
             <div class="card-header">
-              <h5 class="card-title">Admin Login</h5>
+              <h2 class="text-center">Admin Login</h2>
             </div>
             <div class="card-body">
-              <form>
+              <form [formGroup]="loginForm">
+                <div *ngIf="message" class="text-center" [ngClass]="{ 'text-success': success, 'text-danger': !success }">
+                  {{ message }}
+                </div>
                 <div class="form-group mb-3">
                   <label class="form-label">Username</label>
                   <input
                     type="text"
                     class="form-control form-control-sm"
-                    id="username"
-                    name="username"
+                    formControlName="username"
                   />
+                  <div *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched" class="text-danger">
+                    Username is required
+                  </div>
                 </div>
                 <div class="form-group mb-3">
                   <label class="form-label">Password</label>
                   <input
                     type="password"
                     class="form-control form-control-sm"
-                    id="password"
-                    name="password"
+                    formControlName="password"
                   />
+                  <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="text-danger">
+                    Password is required
+                  </div>
                 </div>
                 <div class="text-center">
-                  <button class="btn btn-light btn-sm mt-2 w-75">Login</button>
+                  <button
+                    type="submit"
+                    class="btn btn loginbtn btn-sm mt-2 w-75"
+                    [disabled]="loginForm.invalid"
+                    (click)="login()"
+                  >
+                    Login
+                  </button>
                 </div>
               </form>
+              
             </div>
           </div>
         </div>
