@@ -21,81 +21,123 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrl: './price.component.scss',
 })
 export class PriceComponent {
-  priceForm!: FormGroup;
-  capatices: any;
-  theatres: any;
-  prices: any;
-  theatresListWithId: any;
-
-  capacityId: any;
+  priceForm: FormGroup;
+  prices: any[] = [];
+  theatresListWithId: any[] = [];
+  selectedTheatre: any = null;
+  isAdmin: boolean = true;
   addBtn: boolean = true;
   updateBtn: boolean = false;
+
   constructor(
     private fb: FormBuilder,
-    private theatreApi: TheatreService,
-    private capacityApi: CapacityService,
-    private priceApi: PriceService,
-    private router: Router
+    private theatreService: TheatreService,
+    private priceService: PriceService
   ) {
     this.priceForm = this.fb.group({
       theatreId: ['', Validators.required],
-      capacityId: ['', Validators.required],
-      price: [
-        '',
-        [
-          Validators.required,
-          Validators.pattern('^[0-9]*$'),
-          Validators.min(1),
-        ],
-      ],
+      basePrice: ['', Validators.required],
+      extraPricePerPerson: ['', Validators.required],
     });
   }
 
   ngOnInit(): void {
-    this.priceApi.getPrice().subscribe((res) => {
-      this.prices = res;
-      //console.log(res);
-    });
-
-    this.theatreApi.getTheatres().subscribe((res: any) => {
-      this.theatres = res;
-      // console.log(res);
-    });
-
-    this.priceApi.getTheatreById().subscribe((res: any) => {
-      this.theatresListWithId = res;
-      // console.log(res);
-    });
+    this.getPrices();
+    this.getTheatresWithId();
   }
 
-  addPrices(): void {
-    if (this.priceForm.valid) {
-      this.priceApi.addPrice(this.priceForm.value).subscribe((res: any) => {
-        console.log(res);
+  getPrices(): void {
+    this.priceService.getPrices().subscribe(
+      (res: any) => {
+        this.prices = res;
+      },
+      (error) => {
+        console.error('Error fetching prices:', error);
+      }
+    );
+  }
+
+  getTheatresWithId(): void {
+    this.theatreService.getTheatres().subscribe(
+      (res: any) => {
+        this.theatresListWithId = res;
+      },
+      (error) => {
+        console.error('Error fetching theatres with IDs:', error);
+      }
+    );
+  }
+
+  onTheatreChange(): void {
+    const selectedTheatreId = this.priceForm.value.theatreId;
+    this.selectedTheatre = this.theatresListWithId.find(
+      (theatre) => theatre._id === selectedTheatreId
+    );
+    if (this.selectedTheatre) {
+      this.priceForm.patchValue({
+        basePrice: this.selectedTheatre.basePrice,
+        extraPricePerPerson: this.selectedTheatre.extraPricePerPerson,
       });
-      this.priceForm.reset();
-      this.router
-        .navigateByUrl('/admin/home', { skipLocationChange: true })
-        .then(() => {
-          this.router.navigate(['/admin/price']);
-        });
+    }
+  }
+
+  addPrice(): void {
+    if (this.priceForm.valid) {
+      this.priceService.addPrice(this.priceForm.value).subscribe(
+        (res: any) => {
+          console.log('Price added successfully:', res);
+          this.getPrices(); // Refresh prices list after adding
+          this.priceForm.reset();
+        },
+        (error) => {
+          console.error('Error adding price:', error);
+        }
+      );
     } else {
       console.error('Form is invalid. Cannot submit.');
     }
   }
 
-  onTheatreChange(e: any) {
-    const theatreId = e.target.value;
-    console.log(theatreId);
-
-    this.priceApi.getCapacityById(theatreId).subscribe((res: any) => {
-      this.capatices = res;
-      console.log(res, 'capacity with id');
+  editPrice(price: any): void {
+    this.priceForm.patchValue({
+      theatreId: price.theatreId._id,
+      basePrice: price.basePrice,
+      extraPricePerPerson: price.extraPricePerPerson,
     });
+    this.addBtn = false;
+    this.updateBtn = true;
   }
 
-  editPrices(_t64: any) {}
-  updatePrices() {}
+  updatePrice(): void {
+    const priceId = this.priceForm.value._id;
+    this.priceService.updatePrice(priceId, this.priceForm.value).subscribe(
+      (res: any) => {
+        console.log('Price updated successfully:', res);
+        this.getPrices(); // Refresh prices list after updating
+        this.priceForm.reset();
+        this.addBtn = true;
+        this.updateBtn = false;
+      },
+      (error) => {
+        console.error('Error updating price:', error);
+      }
+    );
+  }
 
-  confirmDeletePrices(_t64: any) {}
+  confirmDeletePrice(price: any): void {
+    const confirmDelete = confirm(
+      `Are you sure you want to delete the price for ${price.theatreId.theatrename}?`
+    );
+    if (confirmDelete) {
+      this.priceService.deletePrice(price._id).subscribe(
+        (res: any) => {
+          console.log('Price deleted successfully:', res);
+          this.getPrices(); // Refresh prices list after deleting
+        },
+        (error) => {
+          console.error('Error deleting price:', error);
+        }
+      );
+    }
+  }
 }

@@ -1,37 +1,48 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CapacityService {
-  private addCapacityUrl = 'http://localhost:4000/capacity/addCapacity';
-  private getCapacityUrl = 'http://localhost:4000/capacity/getCapacity';
-  private getCapacityUrlById = 'http://localhost:4000/capacityy/getCapacityWithId';
-  private editCapacityUrl = 'http://localhost:4000/capacity/updateCapacity/';
-  private deleteCapacityUrl = 'http://localhost:4000/capacity/deleteCapacity/';
-  private getTheatresWithIdUrl = 'http://localhost:4000/capacity/gettheatres';
+  private apiUrl = 'http://localhost:4000/capacity';
+
   constructor(private http: HttpClient) {}
 
-  addCapacity(slotData: any): Observable<any> {
-    return this.http.post(this.addCapacityUrl, slotData);
-  }
-  getCapacity(): Observable<any> {
-    return this.http.get(this.getCapacityUrl);
-  }
-  getCapacityById(theatreId:any):Observable<any> {
-    return this.http.post(this.getCapacityUrlById, theatreId);
+  jwttoken(): any {
+    const header = {
+      headers: new HttpHeaders({
+        Authorization: 'Bearer ' + localStorage.getItem('adminToken'),
+      }),
+    };
+    return header;
   }
 
-  getTheatreById():Observable<any> {
-    return this.http.get(this.getTheatresWithIdUrl)
+  addCapacity(capacityData: any): Observable<any> {
+    return this.http.post(
+      `${this.apiUrl}/addCapacity`,
+      capacityData,
+      this.jwttoken()
+    );
   }
-  editCapacity(id: any, data: any): Observable<any> {
-    return this.http.put(this.editCapacityUrl + id, data);
+
+  getCapacities(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/getCapacities`, this.jwttoken());
   }
-  deleteCapacity(id: any): Observable<any> {
-    return this.http.delete(this.deleteCapacityUrl + id);
+
+  updateCapacity(capacityId: string, updatedData: any): Observable<any> {
+    return this.http.put(
+      `${this.apiUrl}/updateCapacity/${capacityId}`,
+      updatedData,
+      this.jwttoken()
+    );
   }
- 
+
+  deleteCapacity(capacityId: string): Observable<any> {
+    return this.http.delete(
+      `${this.apiUrl}/deleteCapacity/${capacityId}`,
+      this.jwttoken()
+    );
+  }
 }

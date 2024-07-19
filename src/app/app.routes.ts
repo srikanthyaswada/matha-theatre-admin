@@ -11,6 +11,7 @@ import { FlowersComponent } from './admin/admin-dashboard/flowers/flowers.compon
 import { SlotsComponent } from './admin/admin-dashboard/slots/slots.component';
 import { CapacityComponent } from './admin/admin-dashboard/capacity/capacity.component';
 import { PriceComponent } from './admin/admin-dashboard/price/price.component';
+import { ProfileComponent } from './admin/profile/profile.component';
 
 export const routes: Routes = [
   { path: '', title: 'admin-login', component: LoginComponent },
@@ -30,7 +31,8 @@ export const routes: Routes = [
       { path: 'flower', title: 'flower', component: FlowersComponent },
       { path: 'slot', title: 'slot', component: SlotsComponent },
       { path: 'capacity', title: 'capacity', component: CapacityComponent },
-      { path: 'price', title: 'price', component: PriceComponent },
+     // { path: 'price', title: 'price', component: PriceComponent },
+      { path: 'profile', title: 'profile', component: ProfileComponent },
     ],
   },
 ];

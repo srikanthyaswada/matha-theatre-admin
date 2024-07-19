@@ -10,13 +10,15 @@
     </div>
 
     <span class="space"></span>
-    <button class="btn me-1  btn-sm">
-      <mat-icon class="" matTooltip="Profile">account_box</mat-icon>
+    <button class="btn me-1 btn-sm">
+      <mat-icon class="" routerLink="profile" matTooltip="Profile"
+        >account_box</mat-icon
+      >
     </button>
-    <button class="btn ms-1  btn-sm">
+    <button class="btn ms-1 btn-sm">
       <mat-icon (click)="logout()" matTooltip="Logout">logout</mat-icon>
     </button>
-  </mat-toolbar> 
+  </mat-toolbar>
 
   <mat-sidenav-container class="main-sidenav-container" autosize>
     <mat-sidenav #sidenav class="main-sidenav" mode="side" opened="true">
@@ -58,7 +60,7 @@
             >Add capacity</span
           >
         </a>
-        <a
+        <!-- <a
           mat-list-item
           (click)="toggleActive('inbox')"
           [matTooltip]="isExpanded ? '' : 'Add price'"
@@ -69,7 +71,7 @@
           <span *ngIf="isExpanded" class="mat-list-item-content"
             >Add Price</span
           >
-        </a>
+        </a> -->
         <a
           mat-list-item
           (click)="toggleActive('star')"

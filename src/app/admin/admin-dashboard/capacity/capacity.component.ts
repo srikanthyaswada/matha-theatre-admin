@@ -20,72 +20,96 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrl: './capacity.component.scss',
 })
 export class CapacityComponent {
-  confirmDeleteCapacity(_t64: any) {
-    throw new Error('Method not implemented.');
-  }
-  editCapacity(_t64: any) {
-    throw new Error('Method not implemented.');
-  }
-  capacityForm!: FormGroup;
-  capatices: any;
-  theatres: any;
-  theatresListWithId: any;
+  capacityForm: FormGroup;
+  capacities: any[] = [];
+  theatresListWithId: any[] = [];
+  addBtn = true;
+  updateBtn = false;
+  selectedCapacity: any;
 
-  capacityId: any;
-  addBtn: boolean = true;
-  updateBtn: boolean = false;
   constructor(
     private fb: FormBuilder,
-    private theatreApi: TheatreService,
     private capacityService: CapacityService,
+    private theatreService: TheatreService,
     private router: Router
   ) {
     this.capacityForm = this.fb.group({
       theatreId: ['', Validators.required],
-      capacity: [
-        '',
-        [
-          Validators.required,
-          Validators.pattern('^[0-9]*$'),
-          Validators.min(1),
-        ],
-      ],
+      capacity: ['', [Validators.required, Validators.min(1)]],
+      basePrice: ['', [Validators.required, Validators.min(0)]],
+      extraPricePerPerson: ['', [Validators.required, Validators.min(0)]],
     });
   }
 
   ngOnInit(): void {
-    this.capacityService.getCapacity().subscribe((res) => {
-      this.capatices = res;
-      console.log(res);
-    });
+    this.getCapacities();
+    this.getTheatres();
+  }
 
-    this.theatreApi.getTheatres().subscribe((res: any) => {
-      this.theatres = res;
-    //  console.log(res);
+  getCapacities(): void {
+    this.capacityService.getCapacities().subscribe((capacities) => {
+      this.capacities = capacities;
     });
-    this.capacityService.getTheatreById().subscribe((res: any) => {
-      this.theatresListWithId = res;
-     // console.log(res);
+  }
+
+  getTheatres(): void {
+    this.theatreService.getTheatres().subscribe((theatres) => {
+      this.theatresListWithId = theatres;
     });
   }
 
   addCapacity(): void {
-    if (this.capacityForm.valid) {
-      this.capacityService
-        .addCapacity(this.capacityForm.value)
-        .subscribe((res: any) => {
-          console.log(res);
-        });
+    if (this.capacityForm.invalid) {
+      return;
+    }
+
+    this.capacityService.addCapacity(this.capacityForm.value).subscribe(() => {
+      this.getCapacities();
       this.capacityForm.reset();
       this.router
         .navigateByUrl('/admin/home', { skipLocationChange: true })
-        .then(() => {
-          this.router.navigate(['/admin/capacity']);
-        });
-    } else {
-      console.error('Form is invalid. Cannot submit.');
-    }
+        .then(() => this.router.navigate(['/admin/capacity']));
+    });
   }
 
-  updateCapacity() {}
+  editCapacity(capacity: any): void {
+    this.addBtn = false;
+    this.updateBtn = true;
+    this.selectedCapacity = capacity;
+    this.capacityForm.patchValue({
+      theatreId: capacity.theatre._id,
+      capacity: capacity.capacity,
+      basePrice: capacity.basePrice,
+      extraPricePerPerson: capacity.extraPricePerPerson,
+    });
+  }
+
+  updateCapacity(): void {
+    if (this.capacityForm.invalid) {
+      return;
+    }
+
+    this.capacityService
+      .updateCapacity(this.selectedCapacity._id, this.capacityForm.value)
+      .subscribe(() => {
+        this.getCapacities();
+        this.addBtn = true;
+        this.updateBtn = false;
+        this.capacityForm.reset();
+        this.router
+          .navigateByUrl('/admin/home', { skipLocationChange: true })
+          .then(() => this.router.navigate(['/admin/capacity']));
+      });
+  }
+
+  confirmDeleteCapacity(capacity: any): void {
+    if (confirm('Are you sure you want to delete this capacity?')) {
+      this.capacityService.deleteCapacity(capacity._id).subscribe(() => {
+        this.getCapacities();
+        this.router
+          .navigateByUrl('/admin/home', { skipLocationChange: true })
+          .then(() => this.router.navigate(['/admin/capacity']));
+      });
+    }
+  }
 }

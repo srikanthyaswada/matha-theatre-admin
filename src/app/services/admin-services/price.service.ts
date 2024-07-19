@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -6,36 +6,42 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class PriceService {
-  private addPriceUrl = 'http://localhost:4000/price/addprice';
-  private getPriceUrl = 'http://localhost:4000/price/getprices';
-  private getPriceUrlById = 'http://localhost:4000/price/getPriceWithId';
-  private editPriceUrl = 'http://localhost:4000/price/updateprice/';
-  private deletePriceUrl = 'http://localhost:4000/price/deleteprice/';
-  private getTheatresWithIdUrl = 'http://localhost:4000/price/gettheatres';
-  private getCapacityWithIdUrl = 'http://localhost:4000/capacity/getCapacityWithId';
+  jwttoken(): any {
+    const header = {
+      headers: new HttpHeaders({
+        Authorization: 'Bearer ' + localStorage.getItem('adminToken'),
+      }),
+    };
+    return header;
+  }
+  private apiUrl = 'http://localhost:4000/price';
 
   constructor(private http: HttpClient) {}
 
-  addPrice(slotData: any): Observable<any> {
-    return this.http.post(this.addPriceUrl, slotData);
-  }
-  getPrice(): Observable<any> {
-    return this.http.get(this.getPriceUrl);
-  }
-  getPriceById(priceId: any): Observable<any> {
-    return this.http.post(this.getPriceUrlById, priceId);
+  addPrice(priceData: any): Observable<any> {
+    return this.http.post(
+      `${this.apiUrl}/addPrice`,
+      priceData,
+      this.jwttoken()
+    );
   }
 
-  getCapacityById(id: any): Observable<any> {
-    return this.http.post(this.getCapacityWithIdUrl, {theatreId:id});
+  getPrices(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/getPrices`, this.jwttoken());
   }
-  getTheatreById(): Observable<any> {
-    return this.http.get(this.getTheatresWithIdUrl);
+
+  updatePrice(priceId: string, updatedData: any): Observable<any> {
+    return this.http.put(
+      `${this.apiUrl}/updatePrice/${priceId}`,
+      updatedData,
+      this.jwttoken()
+    );
   }
-  editPrice(id: any, data: any): Observable<any> {
-    return this.http.put(this.editPriceUrl + id, data);
-  }
-  deletePrice(id: any): Observable<any> {
-    return this.http.delete(this.deletePriceUrl + id);
+
+  deletePrice(priceId: string): Observable<any> {
+    return this.http.delete(
+      `${this.apiUrl}/deletePrice/${priceId}`,
+      this.jwttoken()
+    );
   }
 }

@@ -2,9 +2,9 @@
   <div class="row">
     <div class="col-sm-10 mt-4 m-auto">
       <div class="row">
-        <div class="col-sm-4">
+        <div class="col-sm-12">
           <div>
-            <span class="card-header">Add Theatre Capacity</span>
+            <span class="card-header">Manage Prices</span>
             <hr />
           </div>
           <form [formGroup]="priceForm">
@@ -14,12 +14,12 @@
                 id="theatre"
                 class="form-control"
                 formControlName="theatreId"
-                (change)="onTheatreChange($event)"
+                (change)="onTheatreChange()"
               >
-                <option value="">--- select ---</option>
+                <option value="">--- Select ---</option>
                 <option
-                  *ngFor="let theatre of theatres"
-                  value="{{ theatre._id }}"
+                  *ngFor="let theatre of theatresListWithId"
+                  [value]="theatre._id"
                 >
                   {{ theatre.theatrename }}
                 </option>
@@ -36,47 +36,27 @@
               </div>
             </div>
 
-            <div class="form-group mb-3">
-              <label for="theatre">Capacity</label>
-              <select
-                id="theatre"
-                class="form-control"
-                formControlName="capacityId"
-              >
-                <option value="">--- select ---</option>
-                <option *ngFor="let c of capatices" value="{{ c._id }}">
-                  {{ c.capacity }}
-                </option>
-              </select>
-              <div
-                *ngIf="
-                  priceForm.controls['capacityId'].invalid &&
-                  (priceForm.controls['capacityId'].dirty ||
-                    priceForm.controls['capacityId'].touched)
-                "
-                class="text-danger"
-              >
-                Capacity is required
+            <div *ngIf="selectedTheatre">
+              <div class="form-group mb-3">
+                <label for="basePrice">Base Price</label>
+                <input
+                  type="number"
+                  id="basePrice"
+                  class="form-control"
+                  formControlName="basePrice"
+                  [disabled]="!isAdmin"
+                />
               </div>
-            </div>
 
-            <div class="form-group mb-3">
-              <label>Price</label>
-              <input
-                type="number"
-                id="price"
-                class="form-control"
-                formControlName="price"
-              />
-              <div
-                *ngIf="
-                  priceForm.controls['price'].invalid &&
-                  (priceForm.controls['price'].dirty ||
-                    priceForm.controls['price'].touched)
-                "
-                class="text-danger"
-              >
-                Price is required and must be a positive number
+              <div class="form-group mb-3">
+                <label for="extraPricePerPerson">Extra Price per Person</label>
+                <input
+                  type="number"
+                  id="extraPricePerPerson"
+                  class="form-control"
+                  formControlName="extraPricePerPerson"
+                  [disabled]="!isAdmin"
+                />
               </div>
             </div>
 
@@ -86,8 +66,8 @@
                   type="submit"
                   class="btn btn-primary"
                   *ngIf="addBtn"
-                  (click)="addPrices()"
-                  [disabled]="priceForm.invalid"
+                  (click)="addPrice()"
+                  [disabled]="priceForm.invalid || !isAdmin"
                 >
                   Add Price
                 </button>
@@ -95,8 +75,8 @@
                   type="submit"
                   class="btn btn-primary"
                   *ngIf="updateBtn"
-                  (click)="updatePrices()"
-                  [disabled]="priceForm.invalid"
+                  (click)="updatePrice()"
+                  [disabled]="priceForm.invalid || !isAdmin"
                 >
                   Update Price
                 </button>
@@ -104,46 +84,38 @@
             </div>
           </form>
         </div>
-        <div class="col-sm-1"></div>
-        <div class="col-sm-7">
+      </div>
+
+      <div class="row mt-4">
+        <div class="col-sm-12">
           <div>
             <span class="card-header">Price List</span>
             <hr />
           </div>
 
-          <div
-            class="table-responsive"
-            style="max-height: 400px; overflow-y: auto"
-          >
+          <div class="table-responsive" style="max-height: 400px; overflow-y: auto">
             <table class="table table-bordered text-center">
               <thead class="thead-fixed sticky-top">
                 <tr>
                   <th>#</th>
                   <th>Theatre Name</th>
-                  <th>Theatre Capacity</th>
-                  <th>Price</th>
+                  <th>Base Price</th>
+                  <th>Extra Price per Person</th>
                   <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let t of theatresListWithId; index as i">
+                <tr *ngFor="let price of prices; let i = index">
                   <td>{{ i + 1 }}</td>
-                  <td>{{ t.theatre_details[0]?.theatrename }}</td>
-                  <td>{{ t.capacity_details[0]?.capacity }}</td>
-                  <td>{{ t.price }}</td>
+                  <td>{{ price.theatreData[0]?.theatrename }}</td>
+                  <td>{{ price.basePrice }}</td>
+                  <td>{{ price.extraPricePerPerson }}</td>
                   <td class="text-center">
-                    <button class="btn btn me-1">
-                      <mat-icon color="primary" class="" (click)="editPrices(t)"
-                        >edit</mat-icon
-                      >
+                    <button class="btn btn me-1" (click)="editPrice(price)">
+                      <mat-icon color="primary">edit</mat-icon>
                     </button>
-                    <button class="btn btn ms-1">
-                      <mat-icon
-                        color="warn"
-                        class=""
-                        (click)="confirmDeletePrices(t)"
-                        >delete</mat-icon
-                      >
+                    <button class="btn btn ms-1" (click)="confirmDeletePrice(price)">
+                      <mat-icon color="warn">delete</mat-icon>
                     </button>
                   </td>
                 </tr>

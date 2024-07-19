@@ -22,8 +22,12 @@ export class LoginComponent {
   loginForm: FormGroup;
   message: string | null = null;
   success: boolean = false;
-
-  constructor(private fb: FormBuilder, private adminService: AdminService, private router: Router) {
+  hidePassword: boolean = true;
+  constructor(
+    private fb: FormBuilder,
+    private adminService: AdminService,
+    private router: Router
+  ) {
     this.loginForm = this.fb.group({
       username: ['', [Validators.required]],
       password: ['', [Validators.required]],
@@ -32,6 +36,14 @@ export class LoginComponent {
 
   ngOnInit(): void {}
 
+  togglePasswordVisibility(): void {
+    this.hidePassword = !this.hidePassword;
+  }
+  showEyeIcon(): void {
+    const passwordField = this.loginForm.get('password');
+    if (passwordField && passwordField.value.length > 0) {
+    }
+  }
   login(): void {
     if (this.loginForm.valid) {
       const loginData = this.loginForm.value;
@@ -39,12 +51,14 @@ export class LoginComponent {
         (res) => {
           console.log(res);
           localStorage.setItem('admin', JSON.stringify(res));
+          localStorage.setItem('adminToken', res.token);
           this.message = res.message;
           this.success = true;
           this.router.navigate(['/admin']);
         },
         (error) => {
-          this.message = error.error.message || 'Username and Password are wrong';
+          this.message =
+            error.error.message || 'Username and Password are wrong';
           this.success = false;
         }
       );

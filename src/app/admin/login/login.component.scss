@@ -1,29 +1,22 @@
 .header-bg {
-  color: #ee3c16;
+  color: whitesmoke;
   font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
     "Lucida Sans", Arial, sans-serif;
   letter-spacing: 1px;
-  font-size: 18px;
   font-weight: 600;
+  font-size: 35px;
 }
 .c-name {
-  box-shadow: 1px 2px 2px 3px inset rgb(209, 59, 59);
+  box-shadow: 1px 2px 2px 3px inset white;
   padding: 8px;
   border-radius: 10px;
-}
-.c-caption {
-  color: whitesmoke;
-  font-family: fantasy;
-  letter-spacing: 1px;
-  font-size: 50px;
-  margin-top: 80px;
 }
 
 .main {
   background: url("../../../assets/images/bg.png");
   background-repeat: no-repeat;
   background-size: cover;
-  height: 488px;
+  height: 100%;
 }
 .admin-card {
   margin-top: 50px;
@@ -42,4 +35,62 @@
   background-color: #ee3c16;
   color: whitesmoke;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animated {
+  animation-duration: 0.5s;
+  animation-fill-mode: both;
+}
+
+.fadeInUp {
+  animation-name: fadeInUp;
+}
+
+.delay-1s {
+  animation-delay: 1s;
+}
+
+.delay-2s {
+  animation-delay: 2s;
+}
+
+
+.header-bg {
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.card {
+  border-radius: 10px;
+}
+
+.card-header {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.material-icons {
+  color: rgb(23, 21, 21);
+  font-size: 15px;
+}
+
+.btn {
+  transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+  background-color:#ff4d4d; 
 }

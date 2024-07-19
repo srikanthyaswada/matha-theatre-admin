@@ -15,10 +15,10 @@
                 class="form-control"
                 formControlName="theatreId"
               >
-                <option value="">--- select ---</option>
+                <option value="">--- Select ---</option>
                 <option
-                  *ngFor="let theatre of theatres"
-                  value="{{ theatre._id }}"
+                  *ngFor="let theatre of theatresListWithId"
+                  [value]="theatre._id"
                 >
                   {{ theatre.theatrename }}
                 </option>
@@ -52,6 +52,46 @@
                 class="text-danger"
               >
                 Capacity is required and must be a positive number
+              </div>
+            </div>
+
+            <div class="form-group mb-3">
+              <label for="basePrice">Base Price</label>
+              <input
+                type="number"
+                id="basePrice"
+                class="form-control"
+                formControlName="basePrice"
+              />
+              <div
+                *ngIf="
+                  capacityForm.controls['basePrice'].invalid &&
+                  (capacityForm.controls['basePrice'].dirty ||
+                    capacityForm.controls['basePrice'].touched)
+                "
+                class="text-danger"
+              >
+                Base price is required and must be a positive number
+              </div>
+            </div>
+
+            <div class="form-group mb-3">
+              <label for="extraPricePerPerson">Extra Price per Person</label>
+              <input
+                type="number"
+                id="extraPricePerPerson"
+                class="form-control"
+                formControlName="extraPricePerPerson"
+              />
+              <div
+                *ngIf="
+                  capacityForm.controls['extraPricePerPerson'].invalid &&
+                  (capacityForm.controls['extraPricePerPerson'].dirty ||
+                    capacityForm.controls['extraPricePerPerson'].touched)
+                "
+                class="text-danger"
+              >
+                Extra price per person is required and must be a positive number
               </div>
             </div>
 
@@ -95,39 +135,39 @@
                 <tr>
                   <th>#</th>
                   <th>Theatre Name</th>
-                  <th>Theatre Capacity</th>
+                  <th>Capacity</th>
+                  <th>Base Price</th>
+                  <th>Extra Price per Person</th>
                   <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let t of theatresListWithId; index as i">
+                <tr *ngFor="let capacity of capacities; let i = index">
                   <td>{{ i + 1 }}</td>
-                  <td>{{ t.theatre_details[0]?.theatrename }}</td>
-                  <td>{{ t.capacity }}</td>
+                  <td>{{ capacity.theatre?.theatrename }}</td>
+                  <td>{{ capacity.capacity }}</td>
+                  <td>{{ capacity.basePrice }}</td>
+                  <td>{{ capacity.extraPricePerPerson }}</td>
                   <td class="text-center">
-                    <button class="btn btn me-1">
-                      <mat-icon
-                        color="primary"
-                        class=""
-                        (click)="editCapacity(t)"
-                        >edit</mat-icon
-                      >
+                    <button
+                      class="btn btn me-1"
+                      (click)="editCapacity(capacity)"
+                    >
+                      <mat-icon color="primary">edit</mat-icon>
                     </button>
-                    <button class="btn btn ms-1">
-                      <mat-icon
-                        color="warn"
-                        class=""
-                        (click)="confirmDeleteCapacity(t)"
-                        >delete</mat-icon
-                      >
+                    <button
+                      class="btn btn ms-1"
+                      (click)="confirmDeleteCapacity(capacity)"
+                    >
+                      <mat-icon color="warn">delete</mat-icon>
                     </button>
                   </td>
                 </tr>
               </tbody>
             </table>
-            <div *ngIf="capatices.length === 0" class="text-center">
-              <p>No data found</p>
-            </div>
+          </div>
+          <div *ngIf="capacities.length === 0  || null" class="text-center">
+            <p>No capacities found.</p>
           </div>
         </div>
       </div>

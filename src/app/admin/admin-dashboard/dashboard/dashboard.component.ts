@@ -47,6 +47,7 @@ export class DashboardComponent {
 
   logout(): void {
     localStorage.removeItem('admin');
+    localStorage.removeItem('adminToken');
     this.router.navigate(['/login']);
   }
 }

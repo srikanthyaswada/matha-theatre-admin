@@ -1,7 +1,5 @@
-import { CommonModule, Location } from '@angular/common';
-import { Component } from '@angular/core';
-import { MatIconModule } from '@angular/material/icon';
-
+import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -10,114 +8,127 @@ import {
   Validators,
 } from '@angular/forms';
 import { SlotService } from '../../../services/admin-services/slot.service';
-import { Router } from '@angular/router';
-import { DeleteslotsComponent } from '../deleteslots/deleteslots.component';
-import { MatDialog } from '@angular/material/dialog';
+import { TheatreService } from '../../../services/admin-services/theatre.service';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-slots',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, MatIconModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatIconModule,
+    MatSnackBarModule,
+  ],
   templateUrl: './slots.component.html',
-  styleUrl: './slots.component.scss',
+  styleUrls: ['./slots.component.scss'],
 })
-export class SlotsComponent {
-  slotRangeForm!: FormGroup;
-  slots: any;
-
-  photoId: any;
-  addBtn: boolean = true;
-  updateBtn: boolean = false;
+export class SlotsComponent implements OnInit {
+  slotRangeForm: FormGroup;
+  slots: any[] = [];
+  theatresListWithId: any[] = [];
+  addBtn = true;
+  updateBtn = false;
+  selectedSlotId: string | null = null;
 
   constructor(
     private fb: FormBuilder,
-    private apiService: SlotService,
-    private router: Router,
-    private dialog: MatDialog
+    private slotService: SlotService,
+    private theatreService: TheatreService,
+    private snackBar: MatSnackBar
   ) {
     this.slotRangeForm = this.fb.group({
-      fromslot: ['', Validators.required],
-      toslot: ['', Validators.required],
+      theatreId: ['', Validators.required],
+      startTime: ['', Validators.required],
+      endTime: ['', Validators.required],
     });
   }
 
   ngOnInit(): void {
-    this.apiService.getSlots().subscribe((res: any) => {
-      this.slots = res;
-     // console.log(res);
+    this.loadSlots();
+    this.getTheatres();
+  }
+
+  getTheatres(): void {
+    this.theatreService.getTheatres().subscribe((theatres) => {
+      this.theatresListWithId = theatres;
     });
   }
 
-  addSlot() {
-    if (this.slotRangeForm.valid) {
-      this.apiService
-        .addSlots(this.slotRangeForm.value)
-        .subscribe((res: any) => {
-          console.log(res);
-        });
-      this.slotRangeForm.reset();
-      this.router
-        .navigateByUrl('/admin/home', { skipLocationChange: true })
-        .then(() => {
-          this.router.navigate(['/admin/slot']);
-        });
-    } else {
-      console.error('Form is invalid. Cannot submit.');
-    }
+  loadSlots(): void {
+    this.slotService.getSlots().subscribe(
+      (response) => {
+        this.slots = response;
+      },
+      (error) => {
+        this.snackBar.open('Failed to load slots', 'Close', { duration: 3000 });
+      }
+    );
   }
 
-  editSlot(p: any) {
+  addSlot(): void {
+    if (this.slotRangeForm.invalid) {
+      return;
+    }
+
+    this.slotService.addSlot(this.slotRangeForm.value).subscribe(() => {
+      this.snackBar.open('Slot added successfully', 'Close', {
+        duration: 3000,
+      });
+      this.loadSlots();
+      this.slotRangeForm.reset();
+    });
+  }
+
+  editSlot(slot: any): void {
     this.addBtn = false;
     this.updateBtn = true;
-    console.log(p);
+    this.selectedSlotId = slot._id;
 
-    this.photoId = p._id;
+    // Patch form values with slot details
     this.slotRangeForm.patchValue({
-      fromslot: p.fromslot,
-      toslot: p.toslot,
+      theatreId: slot.theatre._id,
+      startTime: slot.startTime,
+      endTime: slot.endTime,
     });
   }
 
-
-  updateSlot() {
-    this.apiService
-      .editSlots(this.photoId, this.slotRangeForm.value)
-      .subscribe((res: any) => {
-        console.log(res, 'updated');
-      });
-    this.router
-      .navigateByUrl('/admin/home', { skipLocationChange: true })
-      .then(() => {
-        this.router.navigate(['/admin/slot']);
-      });
-  }
-
-
-  confirmDeleteSlot(p: any) {
-    console.log(p, p._id);
-    this.dialog.open(DeleteslotsComponent, {
-      data: p,
-    });
-  }
-  convertTo12Hour(time24hr: string): string {
-    const [hours, minutes] = time24hr.split(':');
-    let formattedTime = '';
-    let period = '';
-
-    if (parseInt(hours) === 0) {
-      formattedTime = '12';
-      period = 'AM';
-    } else if (parseInt(hours) < 12) {
-      formattedTime = hours;
-      period = 'AM';
-    } else if (parseInt(hours) === 12) {
-      formattedTime = '12';
-      period = 'PM';
-    } else {
-      formattedTime = (parseInt(hours) - 12).toString();
-      period = 'PM';
+  updateSlot(): void {
+    if (this.slotRangeForm.invalid || !this.selectedSlotId) {
+      return;
     }
 
-    return `${formattedTime}:${minutes} ${period}`;
+    this.slotService
+      .updateSlot(this.selectedSlotId, this.slotRangeForm.value)
+      .subscribe(() => {
+        this.snackBar.open('Slot updated successfully', 'Close', {
+          duration: 3000,
+        });
+        this.loadSlots();
+        this.slotRangeForm.reset();
+        this.addBtn = true;
+        this.updateBtn = false;
+        this.selectedSlotId = null;
+      });
+  }
+
+  confirmDeleteSlot(slot: any): void {
+    if (confirm('Are you sure you want to delete this slot?')) {
+      this.slotService.deleteSlot(slot._id).subscribe(() => {
+        this.snackBar.open('Slot deleted successfully', 'Close', {
+          duration: 3000,
+        });
+        this.loadSlots();
+      });
+    }
+  }
+
+  convertTo12Hour(time: string): string {
+    const [hours, minutes] = time.split(':').map(Number);
+    const period = hours >= 12 ? 'PM' : 'AM';
+    const hour12 = hours % 12 || 12;
+    return `${hour12}:${minutes.toString().padStart(2, '0')} ${period}`;
   }
 }

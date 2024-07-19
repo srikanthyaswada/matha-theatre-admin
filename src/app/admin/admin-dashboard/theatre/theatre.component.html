@@ -5,14 +5,12 @@
         <div class="col-sm-4">
           <div class="card border-0">
             <div class="card-header">
-              <span>Add Theatre </span>
+              <span>Add Theatre</span>
             </div>
             <div class="card-body">
               <form [formGroup]="theatreForm">
                 <div class="mb-3">
-                  <label for="theatrename" class="form-label"
-                    >Theatre Name:</label
-                  >
+                  <label for="theatrename" class="form-label">Theatre Name:</label>
                   <input
                     id="theatrename"
                     formControlName="theatrename"
@@ -26,14 +24,10 @@
                     "
                     class="text-danger"
                   >
-                    <div
-                      *ngIf="theatreForm.get('theatrename')?.errors?.['required']"
-                    >
+                    <div *ngIf="theatreForm.get('theatrename')?.errors?.['required']">
                       Theatre Name is required.
                     </div>
-                    <div
-                      *ngIf="theatreForm.get('theatrename')?.errors?.['minlength']"
-                    >
+                    <div *ngIf="theatreForm.get('theatrename')?.errors?.['minlength']">
                       Theatre Name must be at least 3 characters long.
                     </div>
                   </div>
@@ -43,10 +37,9 @@
                   <label class="form-label">Images:</label>
                   <input
                     type="file"
-                    multiple
                     formControlName="theatreImage"
                     class="form-control"
-                    (change)="seletedfile($event)"
+                    (change)="selectedFiles($event)"
                   />
                   <div
                     *ngIf="
@@ -56,9 +49,7 @@
                     "
                     class="text-danger"
                   >
-                    <div
-                      *ngIf="theatreForm.get('theatreImage')?.errors?.['required']"
-                    >
+                    <div *ngIf="theatreForm.get('theatreImage')?.errors?.['required']">
                       Images are required.
                     </div>
                   </div>
@@ -67,22 +58,22 @@
                 <div class="row">
                   <div class="text-center mb-3 mt-3">
                     <button
-                      type="submit"
+                      type="button"
                       class="btn btn-primary btn-sm w-75"
                       *ngIf="addBtn"
-                      (click)="addTheatres()"
+                      (click)="addTheatre()"
                       [disabled]="theatreForm.invalid"
                     >
-                      Add theatre
+                      Add Theatre
                     </button>
                     <button
-                      type="submit"
+                      type="button"
                       class="btn btn-primary btn-sm w-75"
                       *ngIf="updateBtn"
                       (click)="updateTheatre()"
                       [disabled]="theatreForm.invalid"
                     >
-                      Update theatre
+                      Update Theatre
                     </button>
                   </div>
                 </div>
@@ -97,7 +88,7 @@
             </div>
             <div class="card-body">
               <div class="table-responsive">
-                <table class="table table" style="vertical-align: middle;">
+                <table class="table table" style="vertical-align: middle">
                   <thead>
                     <tr>
                       <th>#</th>
@@ -112,39 +103,27 @@
                       <td>{{ theatre.theatrename }}</td>
                       <td>
                         <img
-                          [src]="getCakeImageUrl(theatre.theatreImage)"
-                          alt="cake Image"
+                          [src]="getImageUrl(theatre.theatreImage)"
+                          alt="Theatre Image"
                           height="130"
                           width="200"
                         />
                       </td>
-
-                      <td class="text-center"> 
-                        <button class="btn me-1 bg-light">
-                          <mat-icon
-                            mat-list-icon
-                            color="primary"
-                            (click)="editTheatre(theatre)"
-                            >edit</mat-icon
-                          >
+                      <td class="text-center">
+                        <button class="btn me-1 bg-light" (click)="editTheatre(theatre)">
+                          <mat-icon mat-list-icon color="primary">edit</mat-icon>
                         </button>
-
-                        <button class="btn ms-1 bg-light">
-                          <mat-icon
-                            mat-list-icon
-                            color="warn"
-                            (click)="confirmDeleteTheatre(theatre)"
-                            >delete</mat-icon
-                          >
+                        <button class="btn ms-1 bg-light" (click)="confirmDeleteTheatre(theatre)">
+                          <mat-icon mat-list-icon color="warn">delete</mat-icon>
                         </button>
                       </td>
                     </tr>
                   </tbody>
                 </table>
               </div>
-            </div>
-            <div *ngIf="theatresList.length === 0" class="text-center">
-              <p>No theatres found.</p>
+              <div *ngIf="theatresList.length === 0  || null" class="text-center">
+                <p>No theatres found.</p>
+              </div>
             </div>
           </div>
         </div>
