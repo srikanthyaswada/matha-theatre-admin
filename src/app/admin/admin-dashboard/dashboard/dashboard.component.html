@@ -1,152 +1,76 @@
-<div class="main-container">
-  <mat-toolbar class="main-toolbar">
-    <mat-icon class="me-4" (click)="toggleMenu()" [matTooltip]="'Menu'"
-      >menu</mat-icon
-    >
-    <div class="">
-      <h2 class="header-bg">
-        <span class="c-name">Matha Theatres</span>
-      </h2>
-    </div>
-
-    <span class="space"></span>
-    <button class="btn me-1 btn-sm">
-      <mat-icon class="" routerLink="profile" matTooltip="Profile"
-        >account_box</mat-icon
-      >
+<div class="dashboard-container">
+  <mat-toolbar class="dashboard-toolbar">
+    <button mat-icon-button (click)="toggleSidenav()" class="menu-button">
+      <mat-icon>menu</mat-icon>
     </button>
-    <button class="btn ms-1 btn-sm">
-      <mat-icon (click)="logout()" matTooltip="Logout">logout</mat-icon>
+    <div>
+      <img
+        src="assets/images/mainlogo.png"
+        alt="Matha Theatres Logo"
+        class="logo p-2"
+      />
+    </div>
+  
+    <span class="toolbar-spacer"></span>
+    <button mat-icon-button routerLink="profile" matTooltip="Profile">
+      <mat-icon>account_circle</mat-icon>
+    </button>
+    <button mat-icon-button (click)="logout()" matTooltip="Logout">
+      <mat-icon>exit_to_app</mat-icon>
     </button>
   </mat-toolbar>
 
-  <mat-sidenav-container class="main-sidenav-container" autosize>
-    <mat-sidenav #sidenav class="main-sidenav" mode="side" opened="true">
-      <mat-nav-list class="dashboard">
-        <a
-          mat-list-item
-          (click)="toggleActive('account_circle')"
-          [matTooltip]="isExpanded ? '' : 'Home'"
-          matTooltipPosition="after"
-          routerLink="home"
-        >
-          <mat-icon mat-list-icon>home</mat-icon>
-          <span *ngIf="isExpanded" class="mat-list-item-content">Home</span>
+  <mat-sidenav-container class="sidenav-container">
+    <mat-sidenav
+      #sidenav
+      [mode]="isMobile ? 'over' : 'side'"
+      [opened]="!isMobile && isExpanded"
+      class="dashboard-sidenav"
+    >
+      <div class="sidenav-links">
+        <a class="sidenav-link" routerLink="home" (click)="onLinkClick()">
+          <mat-icon>dashboard</mat-icon>
+          <span>Dashboard</span>
         </a>
-
-        <mat-divider></mat-divider>
-
-        <a
-          mat-list-item
-          (click)="toggleActive('inbox')"
-          [matTooltip]="isExpanded ? '' : 'Add Theatre'"
-          matTooltipPosition="after"
-          routerLink="theatre"
-        >
-          <mat-icon mat-list-icon>loupe</mat-icon>
-          <span *ngIf="isExpanded" class="mat-list-item-content"
-            >Add Theatre</span
-          >
+        <a class="sidenav-link" routerLink="theatre" (click)="onLinkClick()">
+          <mat-icon>theater_comedy</mat-icon>
+          <span>Theatre</span>
         </a>
-        <a
-          mat-list-item
-          (click)="toggleActive('inbox')"
-          [matTooltip]="isExpanded ? '' : 'Add Capacity'"
-          matTooltipPosition="after"
-          routerLink="capacity"
-        >
-          <mat-icon mat-list-icon>supervisor_account</mat-icon>
-          <span *ngIf="isExpanded" class="mat-list-item-content"
-            >Add capacity</span
-          >
+        <a class="sidenav-link" routerLink="capacity" (click)="onLinkClick()">
+          <mat-icon>group</mat-icon>
+          <span>Capacity</span>
         </a>
-        <!-- <a
-          mat-list-item
-          (click)="toggleActive('inbox')"
-          [matTooltip]="isExpanded ? '' : 'Add price'"
-          matTooltipPosition="after"
-          routerLink="price"
-        >
-          <mat-icon mat-list-icon class="fw-bold">&#8377;</mat-icon>
-          <span *ngIf="isExpanded" class="mat-list-item-content"
-            >Add Price</span
-          >
-        </a> -->
-        <a
-          mat-list-item
-          (click)="toggleActive('star')"
-          [matTooltip]="isExpanded ? '' : 'Add Event'"
-          matTooltipPosition="after"
-          routerLink="event"
-        >
-          <mat-icon mat-list-icon>event</mat-icon>
-          <span *ngIf="isExpanded" class="mat-list-item-content"
-            >Add Event</span
-          >
+        <a class="sidenav-link" routerLink="event" (click)="onLinkClick()">
+          <mat-icon>event</mat-icon>
+          <span>Events</span>
         </a>
-        <a
-          mat-list-item
-          (click)="toggleActive('star')"
-          [matTooltip]="isExpanded ? '' : 'Add Slot'"
-          matTooltipPosition="after"
-          routerLink="slot"
-        >
-          <mat-icon mat-list-icon>schedule</mat-icon>
-          <span *ngIf="isExpanded" class="mat-list-item-content">Add Slot</span>
+        <a class="sidenav-link" routerLink="slot" (click)="onLinkClick()">
+          <mat-icon>schedule</mat-icon>
+          <span>Slots</span>
         </a>
-        <a
-          mat-list-item
-          (click)="toggleActive('drafts')"
-          [matTooltip]="isExpanded ? '' : 'Add Cake'"
-          matTooltipPosition="after"
-          routerLink="cake"
-        >
-          <mat-icon mat-list-icon>cake</mat-icon>
-          <span *ngIf="isExpanded" class="mat-list-item-content">Add Cake</span>
+        <a class="sidenav-link" routerLink="cake" (click)="onLinkClick()">
+          <mat-icon>cake</mat-icon>
+          <span>Cakes</span>
         </a>
-
-        <a
-          mat-list-item
-          (click)="toggleActive('mail')"
-          [matTooltip]="isExpanded ? '' : 'Add Props'"
-          matTooltipPosition="after"
-          routerLink="props"
-        >
-          <mat-icon mat-list-icon>grains</mat-icon>
-          <span *ngIf="isExpanded" class="mat-list-item-content"
-            >Add Props</span
-          >
+        <a class="sidenav-link" routerLink="props" (click)="onLinkClick()">
+          <mat-icon>emoji_objects</mat-icon>
+          <span>Props</span>
         </a>
-        <a
-          mat-list-item
-          (click)="toggleActive('delete')"
-          [matTooltip]="isExpanded ? '' : 'Add Photos'"
-          matTooltipPosition="after"
-          routerLink="photo"
-        >
-          <mat-icon mat-list-icon>photo_add</mat-icon>
-          <span *ngIf="isExpanded" class="mat-list-item-content"
-            >Add Photos</span
-          >
+        <a class="sidenav-link" routerLink="photo" (click)="onLinkClick()">
+          <mat-icon>photo_camera</mat-icon>
+          <span>Photos</span>
         </a>
-        <a
-          mat-list-item
-          (click)="toggleActive('warning')"
-          [matTooltip]="isExpanded ? '' : 'Add Flowers'"
-          matTooltipPosition="after"
-          routerLink="flower"
-        >
-          <mat-icon mat-list-icon>local_florist</mat-icon>
-          <span *ngIf="isExpanded" class="mat-list-item-content"
-            >AddFlowers</span
-          >
+        <a class="sidenav-link" routerLink="flower" (click)="onLinkClick()">
+          <mat-icon>local_florist</mat-icon>
+          <span>Flowers</span>
         </a>
-        <mat-divider></mat-divider>
-      </mat-nav-list>
+      </div>
     </mat-sidenav>
 
-    <div class="main-sidenav-content">
-      <router-outlet></router-outlet>
-    </div>
+    <mat-sidenav-content>
+      <div class="content-container">
+        <router-outlet></router-outlet>
+      </div>
+    </mat-sidenav-content>
   </mat-sidenav-container>
 </div>

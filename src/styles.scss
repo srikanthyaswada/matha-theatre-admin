@@ -1,4 +1,57 @@
-/* You can add global styles to this file, and also import other style files */
+@use '@angular/material' as mat;
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.custom-snackbar {
+  &.snack-bar-success,
+  &.snack-bar-error,
+  &.snack-bar-update,
+  &.snack-bar-delete {
+    --mdc-snackbar-container-color: #4caf50;
+    --mdc-snackbar-supporting-text-color: white;
+    --mat-mdc-snack-bar-button-color: white;
+  }
+
+  &.snack-bar-error {
+    --mdc-snackbar-container-color: #ff9800;
+  }
+
+  &.snack-bar-update {
+    --mdc-snackbar-container-color: #2196f3;
+  }
+
+  &.snack-bar-delete {
+    --mdc-snackbar-container-color: #f44336;
+  }
+
+  .mat-mdc-snack-bar-action {
+    .mdc-button__label {
+      color: white !important;
+    }
+  }
+
+  .mat-mdc-snack-bar-action .mdc-button:not(:disabled) {
+    color: white;
+  }
+}
+
+.mdc-snackbar {
+  position: fixed !important;
+  top: 60px !important;
+  right: 30px !important;
+  left: auto !important;
+  bottom: auto !important;
+  margin: 0 !important;
+}
+
+.mdc-snackbar__surface {
+  margin-top: 0 !important;
+  border-radius: 20px !important;
+}

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -17,15 +17,17 @@ import { MatIconModule } from '@angular/material/icon';
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, MatIconModule],
   templateUrl: './capacity.component.html',
-  styleUrl: './capacity.component.scss',
+  styleUrls: ['./capacity.component.scss'],
 })
-export class CapacityComponent {
+export class CapacityComponent implements OnInit {
   capacityForm: FormGroup;
   capacities: any[] = [];
+  filteredCapacities: any[] = [];
   theatresListWithId: any[] = [];
   addBtn = true;
   updateBtn = false;
   selectedCapacity: any;
+  searchTerm: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -49,6 +51,7 @@ export class CapacityComponent {
   getCapacities(): void {
     this.capacityService.getCapacities().subscribe((capacities) => {
       this.capacities = capacities;
+      this.filteredCapacities = capacities;
     });
   }
 
@@ -111,5 +114,15 @@ export class CapacityComponent {
           .then(() => this.router.navigate(['/admin/capacity']));
       });
     }
+  }
+
+  filterCapacities(): void {
+    const term = this.searchTerm.toLowerCase();
+    this.filteredCapacities = this.capacities.filter(capacity =>
+      capacity.theatre?.theatrename.toLowerCase().includes(term) ||
+      capacity.capacity.toString().includes(term) ||
+      capacity.basePrice.toString().includes(term) ||
+      capacity.extraPricePerPerson.toString().includes(term)
+    );
   }
 }

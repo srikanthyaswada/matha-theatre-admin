@@ -1,130 +1,149 @@
 <div class="container-fluid">
   <div class="row">
-    <div class="col-sm-10 m-auto">
-      <div class="row mt-4">
-        <div class="col-sm-4">
-          <div class="card border-0">
-            <div class="card-header">
-              <span>Add Theatre</span>
-            </div>
-            <div class="card-body">
-              <form [formGroup]="theatreForm">
-                <div class="mb-3">
-                  <label for="theatrename" class="form-label">Theatre Name:</label>
-                  <input
-                    id="theatrename"
-                    formControlName="theatrename"
-                    class="form-control form-control-sm"
-                  />
-                  <div
-                    *ngIf="
-                      theatreForm.get('theatrename')?.invalid &&
-                      (theatreForm.get('theatrename')?.dirty ||
-                        theatreForm.get('theatrename')?.touched)
-                    "
-                    class="text-danger"
-                  >
-                    <div *ngIf="theatreForm.get('theatrename')?.errors?.['required']">
-                      Theatre Name is required.
-                    </div>
-                    <div *ngIf="theatreForm.get('theatrename')?.errors?.['minlength']">
-                      Theatre Name must be at least 3 characters long.
-                    </div>
-                  </div>
-                </div>
-
-                <div class="mb-3">
-                  <label class="form-label">Images:</label>
-                  <input
-                    type="file"
-                    formControlName="theatreImage"
-                    class="form-control"
-                    (change)="selectedFiles($event)"
-                  />
-                  <div
-                    *ngIf="
-                      theatreForm.get('theatreImage')?.invalid &&
-                      (theatreForm.get('theatreImage')?.dirty ||
-                        theatreForm.get('theatreImage')?.touched)
-                    "
-                    class="text-danger"
-                  >
-                    <div *ngIf="theatreForm.get('theatreImage')?.errors?.['required']">
-                      Images are required.
-                    </div>
-                  </div>
-                </div>
-
-                <div class="row">
-                  <div class="text-center mb-3 mt-3">
-                    <button
-                      type="button"
-                      class="btn btn-primary btn-sm w-75"
-                      *ngIf="addBtn"
-                      (click)="addTheatre()"
-                      [disabled]="theatreForm.invalid"
-                    >
-                      Add Theatre
-                    </button>
-                    <button
-                      type="button"
-                      class="btn btn-primary btn-sm w-75"
-                      *ngIf="updateBtn"
-                      (click)="updateTheatre()"
-                      [disabled]="theatreForm.invalid"
-                    >
-                      Update Theatre
-                    </button>
-                  </div>
-                </div>
-              </form>
-            </div>
-          </div>
+    <div class="col-sm-4">
+      <div class="card">
+        <div class="card-header bg-dark text-light">
+          <span>{{ addBtn ? "Add Theatre" : "Update Theatre" }}</span>
         </div>
-        <div class="col-sm-8">
-          <div class="card border-0">
-            <div class="card-header">
-              <span class="text-center">Theatres</span>
-            </div>
-            <div class="card-body">
-              <div class="table-responsive">
-                <table class="table table" style="vertical-align: middle">
-                  <thead>
-                    <tr>
-                      <th>#</th>
-                      <th>Name</th>
-                      <th>Image</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr *ngFor="let theatre of theatresList; index as i">
-                      <td>{{ i + 1 }}</td>
-                      <td>{{ theatre.theatrename }}</td>
-                      <td>
-                        <img
-                          [src]="getImageUrl(theatre.theatreImage)"
-                          alt="Theatre Image"
-                          height="130"
-                          width="200"
-                        />
-                      </td>
-                      <td class="text-center">
-                        <button class="btn me-1 bg-light" (click)="editTheatre(theatre)">
-                          <mat-icon mat-list-icon color="primary">edit</mat-icon>
-                        </button>
-                        <button class="btn ms-1 bg-light" (click)="confirmDeleteTheatre(theatre)">
-                          <mat-icon mat-list-icon color="warn">delete</mat-icon>
-                        </button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <div *ngIf="theatresList.length === 0  || null" class="text-center">
-                <p>No theatres found.</p>
+        <div class="card-body">
+          <form [formGroup]="theatreForm">
+            <div class="mb-3">
+              <label for="theatrename" class="form-label">Theatre Name:</label>
+              <input
+                id="theatrename"
+                formControlName="theatrename"
+                class="form-control form-control-sm"
+              />
+              <div
+                *ngIf="
+                  theatreForm.get('theatrename')?.invalid &&
+                  (theatreForm.get('theatrename')?.dirty ||
+                    theatreForm.get('theatrename')?.touched)
+                "
+                class="text-danger"
+              >
+                <div
+                  *ngIf="theatreForm.get('theatrename')?.errors?.['required']"
+                >
+                  Theatre Name is required.
+                </div>
+                <div
+                  *ngIf="theatreForm.get('theatrename')?.errors?.['minlength']"
+                >
+                  Theatre Name must be at least 3 characters long.
+                </div>
               </div>
             </div>
+
+            <div class="mb-3">
+              <label class="form-label">Images:</label>
+              <input
+                type="file"
+                formControlName="theatreImage"
+                class="form-control"
+                (change)="selectedFiles($event)"
+              />
+              <div
+                *ngIf="
+                  theatreForm.get('theatreImage')?.invalid &&
+                  (theatreForm.get('theatreImage')?.dirty ||
+                    theatreForm.get('theatreImage')?.touched)
+                "
+                class="text-danger"
+              >
+                <div
+                  *ngIf="theatreForm.get('theatreImage')?.errors?.['required']"
+                >
+                  Images are required.
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="text-center mb-3 mt-3">
+                <button
+                  type="button"
+                  class="btn btn-theatre btn-sm w-75"
+                  *ngIf="addBtn"
+                  (click)="addTheatre()"
+                  [disabled]="theatreForm.invalid"
+                >
+                  Add Theatre
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-theatre btn-sm w-75"
+                  *ngIf="updateBtn"
+                  (click)="updateTheatre()"
+                >
+                  Update Theatre
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Table for Displaying Theatres -->
+    <div class="col-sm-8">
+      <div class="card border-0">
+        <div class="card-header bg-dark text-light">
+          <span class="text-center ">Theatres</span>
+        </div>
+        <div class="card-body">
+          <!-- Search Bar -->
+          <div class="mb-3">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Search Theatres"
+              [(ngModel)]="searchTerm"
+              (ngModelChange)="filterTheatres()"
+            />
+          </div>
+
+          <div class="table-responsive">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Name</th>
+                  <th>Image</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let theatre of filteredTheatresList; index as i">
+                  <td>{{ i + 1 }}</td>
+                  <td>{{ theatre.theatrename }}</td>
+                  <td>
+                    <img
+                      [src]="getImageUrl(theatre.theatreImage)"
+                      alt="Theatre Image"
+                      width="100"
+                    />
+                  </td>
+                  <td class="text-center">
+                    <button
+                      class="btn me-1 bg-light"
+                      (click)="editTheatre(theatre)"
+                    >
+                      <mat-icon mat-list-icon color="primary">edit</mat-icon>
+                    </button>
+                    <button
+                      class="btn ms-1 bg-light"
+                      (click)="confirmDeleteTheatre(theatre)"
+                    >
+                      <mat-icon mat-list-icon color="warn">delete</mat-icon>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div *ngIf="filteredTheatresList.length === 0" class="text-center">
+            <p>No theatres found.</p>
           </div>
         </div>
       </div>

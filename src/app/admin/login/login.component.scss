@@ -1,96 +1,44 @@
 .header-bg {
   color: whitesmoke;
-  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-    "Lucida Sans", Arial, sans-serif;
-  letter-spacing: 1px;
+  font-family: "Trebuchet MS", Arial, sans-serif;
+  font-size: 2rem;
   font-weight: 600;
-  font-size: 35px;
-}
-.c-name {
-  box-shadow: 1px 2px 2px 3px inset white;
-  padding: 8px;
-  border-radius: 10px;
-}
-
-.main {
-  background: url("../../../assets/images/bg.png");
-  background-repeat: no-repeat;
-  background-size: cover;
-  height: 100%;
-}
-.admin-card {
-  margin-top: 50px;
-  background-color: #fcfafa;
-}
-
-.text-danger {
-  color: #ff4d4d;
-}
-
-.text-success {
-  color: #28a745;
-}
-
-.loginbtn {
-  background-color: #ee3c16;
-  color: whitesmoke;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-}
-
-
-@keyframes fadeInUp {
-  0% {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.animated {
-  animation-duration: 0.5s;
-  animation-fill-mode: both;
-}
-
-.fadeInUp {
-  animation-name: fadeInUp;
-}
-
-.delay-1s {
-  animation-delay: 1s;
-}
-
-.delay-2s {
-  animation-delay: 2s;
-}
-
-
-.header-bg {
   background-color: rgba(0, 0, 0, 0.5);
   padding: 10px;
   border-radius: 5px;
 }
 
-.card {
-  border-radius: 10px;
+.main {
+  background: url("../../../assets/images/login-bg.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100%;
 }
 
-.card-header {
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
+.card {
+  width: 100%;
+  max-width: 400px;
+  border-radius: 8px;
+  background-color: #fff;
 }
 
 .material-icons {
-  color: rgb(23, 21, 21);
-  font-size: 15px;
+  color: rgba(0, 0, 0, 0.5);
+  font-size: 24px;
 }
 
-.btn {
+.btn-login {
+  background-color: goldenrod;
+  border: none;
+  color: #fff;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   transition: background-color 0.3s ease;
 }
 
-.btn:hover {
-  background-color:#ff4d4d; 
+.btn-login:hover {
+  background-color: darkgoldenrod;
+}
+
+.text-danger {
+  color: #dc3545;
 }

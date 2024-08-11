@@ -14,7 +14,7 @@ import { HttpClientModule } from '@angular/common/http';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, HttpClientModule],
+  imports: [CommonModule, HttpClientModule, FormsModule, ReactiveFormsModule],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
@@ -23,45 +23,42 @@ export class LoginComponent {
   message: string | null = null;
   success: boolean = false;
   hidePassword: boolean = true;
+
   constructor(
     private fb: FormBuilder,
     private adminService: AdminService,
     private router: Router
   ) {
     this.loginForm = this.fb.group({
-      username: ['', [Validators.required]],
-      password: ['', [Validators.required]],
+      username: ['', Validators.required],
+      password: ['', Validators.required],
     });
   }
-
-  ngOnInit(): void {}
 
   togglePasswordVisibility(): void {
     this.hidePassword = !this.hidePassword;
   }
-  showEyeIcon(): void {
-    const passwordField = this.loginForm.get('password');
-    if (passwordField && passwordField.value.length > 0) {
-    }
-  }
+
   login(): void {
-    if (this.loginForm.valid) {
-      const loginData = this.loginForm.value;
-      this.adminService.login(loginData).subscribe(
-        (res) => {
-          console.log(res);
-          localStorage.setItem('admin', JSON.stringify(res));
-          localStorage.setItem('adminToken', res.token);
-          this.message = res.message;
-          this.success = true;
-          this.router.navigate(['/admin']);
-        },
-        (error) => {
-          this.message =
-            error.error.message || 'Username and Password are wrong';
-          this.success = false;
-        }
-      );
+    if (this.loginForm.invalid) {
+      // Trigger validation messages by marking all controls as touched
+      this.loginForm.markAllAsTouched();
+      return;
     }
+
+    const loginData = this.loginForm.value;
+    this.adminService.login(loginData).subscribe(
+      (res) => {
+        localStorage.setItem('admin', JSON.stringify(res));
+        localStorage.setItem('adminToken', res.token);
+        this.message = res.message;
+        this.success = true;
+        this.router.navigate(['/admin']);
+      },
+      (error) => {
+        this.message = error.error.message || 'Username and Password are incorrect';
+        this.success = false;
+      }
+    );
   }
 }

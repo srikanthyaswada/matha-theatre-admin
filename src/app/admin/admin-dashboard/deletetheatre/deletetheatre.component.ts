@@ -6,6 +6,7 @@ import {
   MatDialogRef,
 } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { TheatreService } from '../../../services/admin-services/theatre.service';
 
 @Component({
@@ -13,12 +14,13 @@ import { TheatreService } from '../../../services/admin-services/theatre.service
   standalone: true,
   imports: [MatButtonModule, MatDialogModule],
   templateUrl: './deletetheatre.component.html',
-  styleUrl: './deletetheatre.component.scss',
+  styleUrls: ['./deletetheatre.component.scss'],
 })
 export class DeletetheatreComponent {
   constructor(
     private apiService: TheatreService,
     private router: Router,
+    private snackBar: MatSnackBar,
     public dialogRef: MatDialogRef<DeletetheatreComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
@@ -28,16 +30,29 @@ export class DeletetheatreComponent {
   }
 
   onYesClick(): void {
-    console.log(this.data._id);
+    this.apiService.deleteTheatres(this.data._id).subscribe(
+      (res: any) => {
+        console.log('Deletion successful:', res);
+        this.dialogRef.close(true);
+        this.snackBar.open('Theatre deleted successfully.', 'X', {
+          duration: 3000,
+          verticalPosition: 'top',
+          panelClass: ['custom-snackbar', 'snack-bar-delete'],
+        });
 
-    this.apiService.deleteTheatres(this.data._id).subscribe((res: any) => {
-      console.log(res);
-    });
-    this.dialogRef.close(true);
-    this.router
-      .navigateByUrl('/admin/home', { skipLocationChange: true })
-      .then(() => {
-        this.router.navigate(['/admin/theatre']);
-      });
+        this.router
+          .navigateByUrl('/admin/home', { skipLocationChange: true })
+          .then(() => this.router.navigate(['/admin/theatre']));
+      },
+      (error) => {
+        console.error('Error while deleting theatre:', error);
+        this.snackBar.open('Error while deleting theatre.', 'Close', {
+          duration: 3000,
+          verticalPosition: 'top',
+          panelClass: ['custom-snackbar', 'snack-bar-error'],
+        });
+        this.dialogRef.close(false);
+      }
+    );
   }
 }
