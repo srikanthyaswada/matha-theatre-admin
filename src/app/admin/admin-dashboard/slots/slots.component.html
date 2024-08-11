@@ -1,0 +1,152 @@
+<!-- slot.component.html -->
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-10 m-auto mt-4">
+      <div class="row">
+        <div class="col-sm-4">
+          <div>
+            <span class="card-header">Add Time Slots</span>
+            <hr />
+          </div>
+          <form [formGroup]="slotRangeForm">
+            <div class="form-group">
+              <label for="theatreId" class="form-label">Theatre</label>
+              <select
+                id="theatreId"
+                formControlName="theatreId"
+                class="form-control"
+              >
+                <option value="">--- Select Theatre ---</option>
+                <!-- Replace this with dynamic data for theatres -->
+                <option
+                  *ngFor="let theatre of theatresListWithId"
+                  [value]="theatre._id"
+                >
+                  {{ theatre.theatrename }}
+                </option>
+              </select>
+              <div
+                *ngIf="
+                  slotRangeForm.get('theatreId')?.invalid &&
+                  slotRangeForm.get('theatreId')?.touched
+                "
+                class="text-danger"
+              >
+                Theatre is required
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="fromslot" class="form-label">From Time</label>
+              <input
+                type="time"
+                id="fromslot"
+                formControlName="startTime"
+                class="form-control"
+              />
+              <div
+                *ngIf="
+                  slotRangeForm.get('startTime')?.invalid &&
+                  slotRangeForm.get('startTime')?.touched
+                "
+                class="text-danger"
+              >
+                From Time is required.
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="toslot" class="form-label">To Time</label>
+              <input
+                type="time"
+                id="toslot"
+                formControlName="endTime"
+                class="form-control"
+              />
+              <div
+                *ngIf="
+                  slotRangeForm.get('endTime')?.invalid &&
+                  slotRangeForm.get('endTime')?.touched
+                "
+                class="text-danger"
+              >
+                To Time is required.
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="text-center mb-3 mt-3">
+                <button
+                  type="submit"
+                  class="btn btn-primary"
+                  *ngIf="addBtn"
+                  (click)="addSlot()"
+                  [disabled]="slotRangeForm.invalid"
+                >
+                  Add Slot
+                </button>
+                <button
+                  type="submit"
+                  class="btn btn-primary"
+                  *ngIf="updateBtn"
+                  (click)="updateSlot()"
+                  [disabled]="slotRangeForm.invalid"
+                >
+                  Update Slot
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="col-sm-1"></div>
+        <div class="col-sm-7">
+          <div>
+            <span class="card-header">Time Slots</span>
+            <hr />
+          </div>
+
+          <div
+            class="table-responsive"
+            style="max-height: 400px; overflow-y: auto"
+          >
+            <table class="table table-bordered text-center">
+              <thead class="thead-fixed">
+                <tr>
+                  <th>#</th>
+                  <th>Theatre Name</th>
+                  <th>Time Slot</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let slot of slots; index as i">
+                  <td>{{ i + 1 }}</td>
+                  <td>{{ slot.theatre.theatrename }}</td>
+                  <td>
+                    From {{ convertTo12Hour(slot.startTime) }} to
+                    {{ convertTo12Hour(slot.endTime) }}
+                  </td>
+                  <td class="text-center">
+                    <mat-icon
+                      color="primary"
+                      class="me-1"
+                      (click)="editSlot(slot)"
+                      >edit</mat-icon
+                    >
+                    <mat-icon
+                      color="warn"
+                      class="ms-1"
+                      (click)="confirmDeleteSlot(slot)"
+                      >delete</mat-icon
+                    >
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div *ngIf="slots && slots.length === 0" class="text-center">
+            <span>No slots available</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,52 +1,76 @@
-<div class="container-fluid">
-  <div class="row p-1 bg-light">
-    <h2 class="header-bg mt-2">
-      <span class="c-name">Matha Theatres</span>
-    </h2>
-  </div>
-
-  <div class="row main">
-    <div class="col-sm-7">
-      <div class="p-4">
-        <p class="c-caption">
-          Celebrate togetherness with big-screen entertainment along with your
-          loved ones
-        </p>
-      </div>
+<div class="container-fluid main vh-100">
+  <div class="row h-100 justify-content-center align-items-center">
+    <div class="col-sm-6 text-white text-center p-4">
+      <h2 class="header-bg mb-4 animated fadeInUp">Mojo Talkies</h2>
     </div>
-    <div class="col-sm-5 p-4">
-      <div class="row">
-        <div class="col-sm-7">
-          <div class="card admin-card text-light border-0">
-            <div class="card-header">
-              <h5 class="card-title">Admin Login</h5>
+    <div class="col-sm-6 d-flex justify-content-center">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header">
+          <h3 class="card-title text-center">Admin Login</h3>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="loginForm" (ngSubmit)="login()">
+            <div
+              *ngIf="message"
+              class="text-center mb-3"
+              [ngClass]="{ 'text-success': success, 'text-danger': !success }"
+            >
+              {{ message }}
             </div>
-            <div class="card-body">
-              <form>
-                <div class="form-group mb-3">
-                  <label class="form-label">Username</label>
-                  <input
-                    type="text"
-                    class="form-control form-control-sm"
-                    id="username"
-                    name="username"
-                  />
-                </div>
-                <div class="form-group mb-3">
-                  <label class="form-label">Password</label>
-                  <input
-                    type="password"
-                    class="form-control form-control-sm"
-                    id="password"
-                    name="password"
-                  />
-                </div>
-                <div class="text-center">
-                  <button class="btn btn-light btn-sm mt-2 w-75">Login</button>
-                </div>
-              </form>
+            <div class="form-group mb-3">
+              <label for="username" class="form-label">Username</label>
+              <input
+                type="text"
+                id="username"
+                class="form-control"
+                formControlName="username"
+                placeholder="Username"
+              />
+              <div
+                *ngIf="
+                  loginForm.get('username')?.invalid &&
+                  loginForm.get('username')?.touched
+                "
+                class="text-danger mt-1"
+              >
+                Username is required
+              </div>
             </div>
-          </div>
+            <div class="form-group mb-4 position-relative">
+              <label for="password" class="form-label">Password</label>
+              <input
+                [type]="hidePassword ? 'password' : 'text'"
+                id="password"
+                class="form-control"
+                formControlName="password"
+                placeholder="Password"
+              />
+              <i
+                class="material-icons position-absolute mt-3"
+                style="
+                  right: 10px;
+                  top: 50%;
+                  transform: translateY(-50%);
+                  cursor: pointer;
+                "
+                (click)="togglePasswordVisibility()"
+              >
+                {{ hidePassword ? "visibility_off" : "visibility" }}
+              </i>
+              <div
+                *ngIf="
+                  loginForm.get('password')?.invalid &&
+                  loginForm.get('password')?.touched
+                "
+                class="text-danger mt-1"
+              >
+                Password is required
+              </div>
+            </div>
+            <div class="text-center">
+              <button type="submit" class="btn btn-login w-75">Login</button>
+            </div>
+          </form>
         </div>
       </div>
     </div>

@@ -1,32 +1,44 @@
 .header-bg {
-  color: #ee3c16;
-  font-family: fantasy;
-  letter-spacing: 1px;
-}
-.c-name {
-  box-shadow: 1px 2px 2px 3px inset brown;
-  padding: 8px;
-  border-radius: 10px;
-}
-.c-caption {
   color: whitesmoke;
-  font-family: fantasy;
-  letter-spacing: 1px;
-  font-size: 50px;
-  margin-top: 80px;
+  font-family: "Trebuchet MS", Arial, sans-serif;
+  font-size: 2rem;
+  font-weight: 600;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 10px;
+  border-radius: 5px;
 }
 
 .main {
-  background: url("../../../assets/images/bg.png");
+  background: url("../../../assets/images/login-bg.jpg");
   background-repeat: no-repeat;
   background-size: cover;
-  height: 488px;
+  height: 100%;
 }
-.admin-card {
-  background: transparent;
-  margin-top: 50px;
-  border: 1px solid whitesmoke;
+
+.card {
+  width: 100%;
+  max-width: 400px;
+  border-radius: 8px;
+  background-color: #fff;
 }
-input {
-  background: transparent;
+
+.material-icons {
+  color: rgba(0, 0, 0, 0.5);
+  font-size: 24px;
+}
+
+.btn-login {
+  background-color: goldenrod;
+  border: none;
+  color: #fff;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  transition: background-color 0.3s ease;
+}
+
+.btn-login:hover {
+  background-color: darkgoldenrod;
+}
+
+.text-danger {
+  color: #dc3545;
 }

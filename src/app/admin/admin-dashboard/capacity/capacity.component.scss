@@ -1,0 +1,37 @@
+.container-fluid {
+  .row {
+    .col-sm-11 {
+      .card {
+        margin-bottom: 1rem;
+      }
+    }
+    .form-label {
+      font-weight: bold;
+    }
+    .form-select,
+    .form-control {
+      border-radius: 0.375rem;
+      box-shadow: none;
+    }
+    .text-danger {
+      font-size: 0.875rem;
+    }
+    .btn-capacity {
+      background-color: gold;
+      border: none;
+    }
+    .table {
+      th {
+        background-color: #f8f9fa;
+        position: sticky;
+        top: 0;
+        z-index: 2;
+      }
+      tbody {
+        tr:nth-child(even) {
+          background-color: #f2f2f2;
+        }
+      }
+    }
+  }
+}

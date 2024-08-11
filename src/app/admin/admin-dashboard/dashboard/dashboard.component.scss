@@ -1,0 +1,102 @@
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.dashboard-toolbar {
+  background-color: black;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-toolbar .menu-button {
+  display: none;
+}
+
+.dashboard-toolbar .logo {
+  width: 210px;
+  height: 90px;
+}
+
+.toolbar-spacer {
+  flex: 1 1 auto;
+}
+
+.sidenav-container {
+  flex: 1;
+}
+
+.dashboard-sidenav {
+  width: 220px;
+  background-color: #f5eeee;
+  box-shadow: 2px 0 4px rgba(0, 0, 0, 0.2);
+  overflow: auto;
+}
+
+.dashboard-sidenav .sidenav-header {
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(241, 18, 18);
+}
+
+.dashboard-sidenav .sidenav-header .sidenav-logo {
+  width: 120px;
+  height: auto;
+}
+
+.dashboard-sidenav .sidenav-links {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  margin-top: 16px;
+}
+
+.dashboard-sidenav .sidenav-links .sidenav-link {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  text-decoration: none;
+  color: black;
+  font-size: 16px;
+  border-radius: 4px;
+  transition: background-color 0.3s, color 0.3s, padding-left 0.3s;
+}
+
+.dashboard-sidenav .sidenav-links .sidenav-link mat-icon {
+  margin-right: 16px;
+  color: black;
+}
+
+.dashboard-sidenav .sidenav-links .sidenav-link:hover {
+  background-color: rgba(63, 81, 181, 0.1);
+  padding-left: 24px;
+}
+
+.dashboard-sidenav .sidenav-links .sidenav-link:active {
+  background-color: #3f51b5; /* Color for the active state */
+  color: #fff; /* Text color for the active state */
+}
+
+.dashboard-sidenav .sidenav-links .sidenav-link:active mat-icon {
+  color: #fff; /* Icon color for the active state */
+}
+
+.content-container {
+  padding: 24px;
+}
+
+@media (max-width: 960px) {
+  .dashboard-toolbar .menu-button {
+    display: inline-flex;
+  }
+
+  .dashboard-sidenav {
+    width: 70%;
+  }
+}

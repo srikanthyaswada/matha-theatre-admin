@@ -1,0 +1,170 @@
+<div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-10 m-auto">
+        <div class="row mt-4">
+          <div class="col-sm-4">
+            <div class="card border-0">
+              <div class="card-header">
+                <span>Add Partyprops </span>
+              </div>
+              <div class="card-body">
+                <form [formGroup]="partPropsForm">
+                  <div class="mb-3">
+                    <label class="form-label">Partyprop Name:</label>
+                    <input
+                      id=""
+                      formControlName="partyName"
+                      class="form-control form-control-sm"
+                    />
+                    <div
+                      *ngIf="
+                        partPropsForm.get('partyName')?.invalid &&
+                        (partPropsForm.get('partyName')?.dirty ||
+                        partPropsForm.get('partyName')?.touched)
+                      "
+                      class="text-danger"
+                    >
+                      <div *ngIf="partPropsForm.get('partyName')?.errors?.['required']">
+                        Partyprop is required.
+                      </div>
+                    </div>
+                  </div>
+  
+                  <div class="mb-3">
+                    <label class="form-label">Partyprop Images:</label>
+                    <input
+                      type="file"
+                      multiple
+                      formControlName="partyImage"
+                      class="form-control"
+                      (change)="seletedfile($event)"
+                    />
+                    <div
+                      *ngIf="
+                        partPropsForm.get('partyImage')?.invalid &&
+                        (partPropsForm.get('partyImage')?.dirty ||
+                        partPropsForm.get('partyImage')?.touched)
+                      "
+                      class="text-danger"
+                    >
+                      <div
+                        *ngIf="partPropsForm.get('partyImage')?.errors?.['required']"
+                      >
+                        Partyprop Image are required.
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">Partyprop Price:</label>
+                    <input
+                      id="price"
+                      formControlName="partyPrice"
+                      class="form-control form-control-sm"
+                    />
+                    <div
+                      *ngIf="
+                        partPropsForm.get('partyPrice')?.invalid &&
+                        (partPropsForm.get('partyPrice')?.dirty ||
+                        partPropsForm.get('partyPrice')?.touched)
+                      "
+                      class="text-danger"
+                    >
+                      <div
+                        *ngIf="partPropsForm.get('partyPrice')?.errors?.['required']"
+                      >
+                        Partyprop price is required.
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="text-center mb-3">
+                      <button
+                        type="submit"
+                        class="btn btn-primary"
+                        *ngIf="addBtn"
+                        (click)="addProps()"
+                        [disabled]="partPropsForm.invalid"
+                      >
+                        Add Partyprop
+                      </button>
+                      <button
+                        type="submit"
+                        class="btn btn-primary"
+                        *ngIf="updateBtn"
+                        (click)="updateProps()"
+                        [disabled]="partPropsForm.invalid"
+                      >
+                        Update Partyprop
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-8">
+            <div class="card border-0">
+              <div class="card-header">
+                <span class="text-center">Partyprops</span>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table" style="vertical-align: middle">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Image</th>
+                        <th>Price</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let p of partyPropsList; index as i">
+                        <td>{{ i + 1 }}</td>
+                        <td>{{ p.partyName }}</td>
+                        <td>
+                          <img class="p-2"
+                            [src]="getImageUrl(p.partyImage)"
+                            alt="Props Image"
+                            height="100"
+                            width="100"
+                          />
+                        </td>
+                        <td>
+                           {{ p.partyPrice }}
+                        </td>
+                        <td class="text-center"> 
+                          <button class="btn me-1 bg-light">
+                            <mat-icon
+                              mat-list-icon
+                              color="primary"
+                              (click)="editProps(p)"
+                              >edit</mat-icon
+                            >
+                          </button>
+  
+                          <button class="btn ms-1 bg-light">
+                            <mat-icon
+                              mat-list-icon
+                              color="warn"
+                              (click)="confirmDeleteProps(p)"
+                              >delete</mat-icon
+                            >
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div *ngIf="partyPropsList.length === 0" class="text-center">
+                <p>No Partyprop found.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

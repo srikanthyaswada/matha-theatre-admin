@@ -1,0 +1,167 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-10 m-auto">
+      <div class="row mt-4">
+        <div class="col-sm-4">
+          <div class="card border-0">
+            <div class="card-header">
+              <span>Add Cake </span>
+            </div>
+            <div class="card-body">
+              <form [formGroup]="cakeForm">
+                <div class="mb-3">
+                  <label class="form-label">Cake Name:</label>
+                  <input
+                    id="cakeName"
+                    formControlName="cakeName"
+                    class="form-control form-control-sm"
+                  />
+                  <div
+                    *ngIf="
+                      cakeForm.get('cakeName')?.invalid &&
+                      (cakeForm.get('cakeName')?.dirty ||
+                        cakeForm.get('cakeName')?.touched)
+                    "
+                    class="text-danger"
+                  >
+                    <div *ngIf="cakeForm.get('cakeName')?.errors?.['required']">
+                      Cake Name is required.
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label">Cake Images:</label>
+                  <input
+                    type="file"
+                    multiple
+                    formControlName="cakeImage"
+                    class="form-control"
+                    (change)="seletedfile($event)"
+                  />
+                  <div
+                    *ngIf="
+                      cakeForm.get('cakeImage')?.invalid &&
+                      (cakeForm.get('cakeImage')?.dirty ||
+                        cakeForm.get('cakeImage')?.touched)
+                    "
+                    class="text-danger"
+                  >
+                    <div
+                      *ngIf="cakeForm.get('cakeImage')?.errors?.['required']"
+                    >
+                      Cake Image are required.
+                    </div>
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Cake Price:</label>
+                  <input
+                    id="price"
+                    formControlName="cakePrice"
+                    class="form-control form-control-sm"
+                  />
+                  <div
+                    *ngIf="
+                      cakeForm.get('cakePrice')?.invalid &&
+                      (cakeForm.get('cakePrice')?.dirty ||
+                        cakeForm.get('cakePrice')?.touched)
+                    "
+                    class="text-danger"
+                  >
+                    <div
+                      *ngIf="cakeForm.get('cakePrice')?.errors?.['required']"
+                    >
+                      Cake price is required.
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="text-center mb-3">
+                    <button
+                      type="submit"
+                      class="btn btn-primary"
+                      *ngIf="addBtn"
+                      (click)="addCake()"
+                      [disabled]="cakeForm.invalid"
+                    >
+                      Add Cake
+                    </button>
+                    <button
+                      type="submit"
+                      class="btn btn-primary"
+                      *ngIf="updateBtn"
+                      (click)="updateCake()"
+                      [disabled]="cakeForm.invalid"
+                    >
+                      Update Cake
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-8">
+          <div class="card border-0">
+            <div class="card-header">
+              <span class="text-center">Cakes</span>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table" style="vertical-align: middle">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Name</th>
+                      <th>Image</th>
+                      <th>Price</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let cake of cakeList; index as i">
+                      <td>{{ i + 1 }}</td>
+                      <td>{{ cake.cakeName }}</td>
+                      <td>
+                        <img
+                          [src]="getCakeImageUrl(cake.cakeImage)"
+                          alt="cake Image"
+                          height="100"
+                          width="150"
+                        />
+                      </td>
+                      <td>
+                        &#8377; {{ cake.cakePrice }}
+                      </td>
+                      <td>
+                        <mat-icon
+                          class="me-1"
+                          mat-list-icon
+                          color="primary"
+                          (click)="editCake(cake)"
+                          >edit</mat-icon
+                        >
+
+                        <mat-icon
+                          class="ms-1"
+                          mat-list-icon
+                          color="warn"
+                          (click)="confirmDeleteCake(cake)"
+                          >delete</mat-icon
+                        >
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div *ngIf="cakeList.length === 0" class="text-center">
+              <p>No Cakes found.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

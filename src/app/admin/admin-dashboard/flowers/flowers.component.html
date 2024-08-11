@@ -1,0 +1,168 @@
+<div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-10 m-auto">
+        <div class="row mt-4">
+          <div class="col-sm-4">
+            <div class="card border-0">
+              <div class="card-header">
+                <span>Add Flowers </span>
+              </div>
+              <div class="card-body">
+                <form [formGroup]="flowerForm">
+                  <div class="mb-3">
+                    <label class="form-label">Flower Name:</label>
+                    <input
+                      id=""
+                      formControlName="flowerType"
+                      class="form-control form-control-sm"
+                    />
+                    <div
+                      *ngIf="
+                        flowerForm.get('flowerType')?.invalid &&
+                        (flowerForm.get('flowerType')?.dirty ||
+                        flowerForm.get('flowerType')?.touched)
+                      "
+                      class="text-danger"
+                    >
+                      <div *ngIf="flowerForm.get('flowerType')?.errors?.['required']">
+                        Flower Name is required.
+                      </div>
+                    </div>
+                  </div>
+  
+                  <div class="mb-3">
+                    <label class="form-label">Flower Images:</label>
+                    <input
+                      type="file"
+                      multiple
+                      formControlName="flowerImage"
+                      class="form-control"
+                      (change)="seletedfile($event)"
+                    />
+                    <div
+                      *ngIf="
+                        flowerForm.get('flowerImage')?.invalid &&
+                        (flowerForm.get('flowerImage')?.dirty ||
+                        flowerForm.get('flowerImage')?.touched)
+                      "
+                      class="text-danger"
+                    >
+                      <div
+                        *ngIf="flowerForm.get('flowerImage')?.errors?.['required']"
+                      >
+                        Flower Image are required.
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">Flower Price:</label>
+                    <input
+                      id="price"
+                      formControlName="flowerPrice"
+                      class="form-control form-control-sm"
+                    />
+                    <div
+                      *ngIf="
+                        flowerForm.get('flowerPrice')?.invalid &&
+                        (flowerForm.get('flowerPrice')?.dirty ||
+                        flowerForm.get('flowerPrice')?.touched)
+                      "
+                      class="text-danger"
+                    >
+                      <div
+                        *ngIf="flowerForm.get('flowerPrice')?.errors?.['required']"
+                      >
+                        Flower price is required.
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="text-center mb-3">
+                      <button
+                        type="submit"
+                        class="btn btn-primary"
+                        *ngIf="addBtn"
+                        (click)="addFlower()"
+                        [disabled]="flowerForm.invalid"
+                      >
+                        Add Flower
+                      </button>
+                      <button
+                        type="submit"
+                        class="btn btn-primary"
+                        *ngIf="updateBtn"
+                        (click)="updateFlower()"
+                        [disabled]="flowerForm.invalid"
+                      >
+                        Update Flower
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-8">
+            <div class="card border-0">
+              <div class="card-header">
+                <span class="text-center">Flowers</span>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table" style="vertical-align: middle">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Image</th>
+                        <th>Price</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let f of flowerList; index as i">
+                        <td>{{ i + 1 }}</td>
+                        <td>{{ f.flowerType }}</td>
+                        <td>
+                          <img class="p-2"
+                            [src]="getCakeImageUrl(f.flowerImage)"
+                            alt="Flower Image"
+                            height="100"
+                            width="100"
+                          />
+                        </td>
+                        <td>
+                           {{ f.flowerPrice }}
+                        </td>
+                        <td>
+                          <mat-icon
+                            class="me-1"
+                            mat-list-icon
+                            color="primary"
+                            (click)="editFlower(f)"
+                            >edit</mat-icon
+                          >
+  
+                          <mat-icon
+                            class="ms-1"
+                            mat-list-icon
+                            color="warn"
+                            (click)="confirmDeleteFlower(f)"
+                            >delete</mat-icon
+                          >
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div *ngIf="flowerList.length === 0" class="text-center">
+                <p>No Flowers found.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

@@ -1,0 +1,129 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-10 mt-4 m-auto">
+      <div class="row">
+        <div class="col-sm-12">
+          <div>
+            <span class="card-header">Manage Prices</span>
+            <hr />
+          </div>
+          <form [formGroup]="priceForm">
+            <div class="form-group mb-3">
+              <label for="theatre">Theatre</label>
+              <select
+                id="theatre"
+                class="form-control"
+                formControlName="theatreId"
+                (change)="onTheatreChange()"
+              >
+                <option value="">--- Select ---</option>
+                <option
+                  *ngFor="let theatre of theatresListWithId"
+                  [value]="theatre._id"
+                >
+                  {{ theatre.theatrename }}
+                </option>
+              </select>
+              <div
+                *ngIf="
+                  priceForm.controls['theatreId'].invalid &&
+                  (priceForm.controls['theatreId'].dirty ||
+                    priceForm.controls['theatreId'].touched)
+                "
+                class="text-danger"
+              >
+                Theatre is required
+              </div>
+            </div>
+
+            <div *ngIf="selectedTheatre">
+              <div class="form-group mb-3">
+                <label for="basePrice">Base Price</label>
+                <input
+                  type="number"
+                  id="basePrice"
+                  class="form-control"
+                  formControlName="basePrice"
+                  [disabled]="!isAdmin"
+                />
+              </div>
+
+              <div class="form-group mb-3">
+                <label for="extraPricePerPerson">Extra Price per Person</label>
+                <input
+                  type="number"
+                  id="extraPricePerPerson"
+                  class="form-control"
+                  formControlName="extraPricePerPerson"
+                  [disabled]="!isAdmin"
+                />
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="text-center">
+                <button
+                  type="submit"
+                  class="btn btn-primary"
+                  *ngIf="addBtn"
+                  (click)="addPrice()"
+                  [disabled]="priceForm.invalid || !isAdmin"
+                >
+                  Add Price
+                </button>
+                <button
+                  type="submit"
+                  class="btn btn-primary"
+                  *ngIf="updateBtn"
+                  (click)="updatePrice()"
+                  [disabled]="priceForm.invalid || !isAdmin"
+                >
+                  Update Price
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="row mt-4">
+        <div class="col-sm-12">
+          <div>
+            <span class="card-header">Price List</span>
+            <hr />
+          </div>
+
+          <div class="table-responsive" style="max-height: 400px; overflow-y: auto">
+            <table class="table table-bordered text-center">
+              <thead class="thead-fixed sticky-top">
+                <tr>
+                  <th>#</th>
+                  <th>Theatre Name</th>
+                  <th>Base Price</th>
+                  <th>Extra Price per Person</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let price of prices; let i = index">
+                  <td>{{ i + 1 }}</td>
+                  <td>{{ price.theatreData[0]?.theatrename }}</td>
+                  <td>{{ price.basePrice }}</td>
+                  <td>{{ price.extraPricePerPerson }}</td>
+                  <td class="text-center">
+                    <button class="btn btn me-1" (click)="editPrice(price)">
+                      <mat-icon color="primary">edit</mat-icon>
+                    </button>
+                    <button class="btn btn ms-1" (click)="confirmDeletePrice(price)">
+                      <mat-icon color="warn">delete</mat-icon>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
